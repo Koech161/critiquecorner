@@ -9,4 +9,5 @@ class User(db.Model):
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False) 
 
-    reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')   
+    reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan', lazy=True)
+    users_books = db.relationship('UsersBook', back_populates='user', cascade='all, delete-orphan', lazy=True)

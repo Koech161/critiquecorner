@@ -22,7 +22,6 @@ function App() {
       <div className='col-md-4' key={book.id}>
         <img  className='img-fluid' src={book.image_filename} alt='alt'/>
         <h1>{book.title}</h1>
-        <h3>{book.author}</h3>
         <button className='btn bg-success text-white '>Add Review</button>
       </div>
     ))

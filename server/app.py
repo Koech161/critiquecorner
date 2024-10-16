@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify, redirect, url_for, g
 from models.book import Book
 from models.review import Review
 from models.user import User
+from models.author import Author
+from models.userbook import UsersBook
 from config import db
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
@@ -31,6 +33,7 @@ migrate = Migrate(app, db)
 api = Api(app)
 CORS(app)
 load_dotenv()
+# secret keys for session tokens
 app.config['SECRET_KEY'] = base64.b64encode(os.urandom(24)).decode('utf-8')
 cloud_name=os.getenv('CLOUDINARY_CLOUD_NAME')
 api_key=os.getenv('CLOUDINARY_API_KEY')
@@ -81,12 +84,15 @@ class MyModelView(ModelView):
 admin = Admin(app, name='CritiqueCorner Admin', template_mode='bootstrap3')
 admin.add_view(MyModelView(Book, db.session))
 admin.add_view(MyModelView(Review, db.session))
-admin.add_view(MyModelView(User, db.session))   
+admin.add_view(MyModelView(User, db.session))  
+admin.add_view(MyModelView(Author, db.session)) 
+admin.add_view(MyModelView(UsersBook, db.session))
 
 class Home(Resource):
     def get(self):
         return 'Welcome to Book review'
     
+    # User Registration
 class Register(Resource):
     def post(self):
         data = request.get_json()
@@ -103,7 +109,7 @@ class Register(Resource):
             return {'message': 'User registered succesfully', 'User': new_user.username}, 201
         except Exception as e:
             return {'Registration error': str(e)}, 500
-        
+     # user Login   
 class Login(Resource):
     def post(self):
         data = request.get_json()
@@ -123,9 +129,9 @@ class Login(Resource):
             return {'error': 'Invalid user credentials'}, 400
     def delete(self):
        return {'user logout'}   
-
+    # Admin is the only to add book
 class AddBook(Resource):
-    @jwt_required
+    #@jwt_required
     def post(self):
 
         if 'file'  not in request.files:
@@ -135,20 +141,22 @@ class AddBook(Resource):
             return {'error':'No selected file'}, 400
         data = request.form
         title = data.get('title')
-        author = data.get('author')
-        if not title or not author:
+        author_id = data.get('author_id')
+        if not title or not author_id:
             return {'error': 'Invalid input'}, 400
        
         try:
             upload_result = cloudinary.uploader.upload(file, resource_type= 'image')
             image_url = upload_result['secure_url']
-            newbook = Book(title=title, author=author, image_filename=image_url)
+            newbook = Book(title=title, author_id=author_id, image_filename=image_url)
             db.session.add(newbook)
             db.session.commit()
             return {'message':'Book added successfully','book': newbook.title, 'author': newbook.author}, 201
         except Exception as e:
             db.session.rollback()
             return {'Adding book error': str(e)}, 500
+        
+     #Only Authenticated User should view books and add reviews   
     # @jwt_required
     def get(self):
         books = Book.query.all()
@@ -186,7 +194,7 @@ class BookByID(Resource):
         except Exception as e:
             db.session.rollback()
             return {'error': str(e)}, 500 
-
+# Users should add the reviews
 class AddReview(Resource):
 
     @jwt_required
@@ -213,10 +221,11 @@ class AddReview(Resource):
             db.session.commit()
             return {'message': 'Review added successfully', 'review':new_review.content, 'rating': new_review.rating}
         except Exception as e:
+            db.session.rollback()
             return {'error': str(e)},500
 
 class ReviewByID(Resource):
-    @jwt_required
+    #@jwt_required
     def patch(self, id):
         review = Review.query.get(id)
         if not review:
@@ -242,6 +251,59 @@ class ReviewByID(Resource):
         db.session.commit()
         return {'message':'Review deleted succesfully'}, 200   
         
+class Authors(Resource):
+    #@jwt_required
+    def get(self):
+        authors = Author.query.all()
+        if not Authors:
+            return {'error': 'No authors found.'}, 404
+        author_dict = [author.to_dict() for author in authors]
+
+        return jsonify(author_dict)
+    #@jwt_required
+    def post(self):
+        data = request.get_json()
+
+        if not data:
+            return {'error': 'No input provided'}, 404
+        name = data.get('name')
+        new_author = Author(name=name)
+        try:
+            db.session.add(new_author)
+            db.session.commit()
+            return {'message': 'Author added successfully', 'author': new_author.name}, 201
+        except Exception as e:
+            db.session.rollback()
+            return {'error': str(e)}, 500
+
+class UsersBooks(Resource):
+    def get(self):
+        usersbook = UsersBook.query.all()
+        if not usersbook:
+            return {'error': 'usersbook not found'},404
+        usersbook_dict = [userbook.to_dict() for userbook in usersbook]
+
+        return jsonify(usersbook_dict), 200
+    
+    def post(self):
+        data = request.get_json()
+        if not data:
+            return {'error': 'Not input provided'}, 404
+        user_id = data.get('user_id')
+        book_id = data.get('book_id')
+
+        new_userbook = UsersBook(user_id=user_id, book_id=book_id)
+
+        try:
+            db.session.add(new_userbook)
+            db.session.commit()
+            return {'message', 'new userbook added succesfully'}, 201
+        except Exception as e:
+            db.session.rollback()
+            return {'error': str(e)}, 500
+        
+
+                 
         
 
 
@@ -253,6 +315,8 @@ api.add_resource(AddBook, '/books')
 api.add_resource(BookByID, '/books/<int:id>')
 api.add_resource(AddReview, '/reviews')
 api.add_resource(ReviewByID, '/reviews/<int:id>')
+api.add_resource(Authors, '/authors')
+api.add_resource(UsersBooks, '/usersbooks')
 
     
 
