@@ -43,4 +43,7 @@
   .submit-button:hover {
     background-color: #f9ae3b;
   }
-  
+  .error {
+    color: red;
+    margin-top: 5px;
+  }

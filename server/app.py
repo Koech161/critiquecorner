@@ -145,10 +145,10 @@ class Register(Resource):
 class Login(Resource):
     def post(self):
         data = request.get_json()
-        username = data.get('username')
+        email = data.get('email')
         password = data.get('password')
 
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
 
         if user and check_password_hash(user.password, password):
 

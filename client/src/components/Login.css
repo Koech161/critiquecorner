@@ -43,4 +43,6 @@
   .submit-button:hover {
     background-color: #f9ae3b;
   }
-  
+  .error{
+    color: red;
+  }
