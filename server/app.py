@@ -22,6 +22,8 @@ from cloudinary.utils import cloudinary_url
 from dotenv import load_dotenv
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_wtf import FlaskForm
+from wtforms import SelectField
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -48,7 +50,7 @@ cloudinary.config(
 # use @jwt_required decorator to secure routes
 def jwt_required(f):
     @wraps(f)
-    def decorated(*args, **kwags):
+    def decorated(*args, **kwargs):
         token = None
 
         if 'Authorization' in request.headers:
@@ -56,14 +58,15 @@ def jwt_required(f):
             
 
         if not token:
-            return {'meassage':'Token is missing'}, 403
+            return {'message':'Token is missing'}, 403
         
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             g.current_user = User.query.get(data['user_id'])
+            print(g.current_user)
         except Exception:
             return  {'message': 'Token is invalid or expired'}, 403
-        return f(*args, **kwags) 
+        return f(*args, **kwargs) 
     return decorated
 
 
@@ -72,7 +75,7 @@ def jwt_required(f):
 #admin_dash_board
 class MyModelView(ModelView):
     def is_accessible(self):
-        # return hasattr(g, 'current_user') and g.current_user is not None 
+        #return hasattr(g, 'current_user') and g.current_user is not None 
         return True
    
     def access_denied(self):
@@ -80,13 +83,42 @@ class MyModelView(ModelView):
     can_create = True
     can_edit = True
     can_delete =True
+class BookModelView(MyModelView):
+    form_columns = ['title', 'image_filename', 'author_id', 'published_at']
+
+    def create_form(self):
+        form = super(BookModelView, self).create_form()
+        form.author_id.choices = self.get_author_choices()
+        return form
+
+    def edit_form(self, obj):
+        form = super(BookModelView, self).edit_form(obj)
+        form.author_id.choices = self.get_author_choices()
+        return form
+
+    def get_author_choices(self):
+        authors = Author.query.all()
+        return [(author.id, author.name) for author in authors]
+
+class ReviewModelView(MyModelView):
+    form_columns = ['content', 'rating', 'user_id', 'book_id']
+
+class UserModelView(MyModelView):
+    form_columns = ['username', 'email', 'password']
+
+class AuthorModelView(MyModelView):
+    form_columns = ['name']
+
+class UsersBookModelView(MyModelView):
+    form_columns = ['user_id', 'book_id', 'date_added']   
+
 
 admin = Admin(app, name='CritiqueCorner Admin', template_mode='bootstrap3')
-admin.add_view(MyModelView(Book, db.session))
-admin.add_view(MyModelView(Review, db.session))
-admin.add_view(MyModelView(User, db.session))  
-admin.add_view(MyModelView(Author, db.session)) 
-admin.add_view(MyModelView(UsersBook, db.session))
+admin.add_view(BookModelView(Book , db.session))
+admin.add_view(ReviewModelView(Review, db.session))
+admin.add_view(UserModelView(User, db.session))  
+admin.add_view(AuthorModelView(Author, db.session)) 
+admin.add_view(UsersBookModelView(UsersBook, db.session))
 
 class Home(Resource):
     def get(self):
@@ -148,7 +180,7 @@ class AddBook(Resource):
         try:
             upload_result = cloudinary.uploader.upload(file, resource_type= 'image')
             image_url = upload_result['secure_url']
-            newbook = Book(title=title, author_id=author_id, image_filename=image_url)
+            newbook = Book(title=title, image_filename=image_url, author_id=author_id)
             db.session.add(newbook)
             db.session.commit()
             return {'message':'Book added successfully','book': newbook.title, 'author': newbook.author}, 201
@@ -169,7 +201,7 @@ class AddBook(Resource):
             return {'error': 'No books found'} ,404
 
 class BookByID(Resource):
-    @jwt_required
+    #@jwt_required
     def delete(self, id):
         book = Book.query.get(id)
         if not book:
@@ -177,7 +209,7 @@ class BookByID(Resource):
         db.session.delete(book)  
         db.session.commit()
         return {'message': f'Book {book.title} deleted successfully'}, 200
-    @jwt_required
+   # @jwt_required
     def patch(self, id):
         book = Book.query.get(id)
         if not book:
@@ -197,7 +229,7 @@ class BookByID(Resource):
 # Users should add the reviews
 class AddReview(Resource):
 
-    @jwt_required
+    #@jwt_required
     def get(self):
         reviews = Review.query.all()
         if not reviews:
@@ -205,7 +237,7 @@ class AddReview(Resource):
         return reviews.to_dict(), 200
 
 
-    @jwt_required
+    #@jwt_required
     def post(self):
         data = request.get_json()
         content = data.get('content')
@@ -242,7 +274,7 @@ class ReviewByID(Resource):
         except Exception as e:
             db.session.rollback()
             return {'error updating review':str(e)}, 500  
-    @jwt_required
+    #@jwt_required
     def delete(self, id):
         review = Review.query.get(id)
         if not review:
