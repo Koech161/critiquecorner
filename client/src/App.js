@@ -1,38 +1,34 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Homepage from './components/Homepage';
+import BookManager from './components/BookManager';
+import ReviewManager from './components/ReviewManager';
+import UserManager from './components/UserManager';
+import AdminPanel from './components/AdminPanel';
+import Login from './components/Login';
+import Register from './components/Register';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { useEffect, useState } from 'react';
-import './App.css';
 
-function App() {
-  const [books, setBooks] = useState({})
-
-  useEffect(() =>{
-    fetch('/books')
-    .then((res) => res.json())
-    .then((data) => {
-      setBooks(data)
-      console.log(data);
-      
-    })
-  },[])
+const App = () => {
   return (
-    <div className="App">
-     <div className='row g-3'>
-  {books.length > 0 ? (
-    books.map((book) => (
-      <div className='col-md-4' key={book.id}>
-        <img  className='img-fluid' src={book.image_filename} alt='alt'/>
-        <h1>{book.title}</h1>
-        <button className='btn bg-success text-white '>Add Review</button>
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          {/* Use element instead of component */}
+          <Route path="/" element={<Homepage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin/books" element={<BookManager />} />
+          <Route path="/admin/reviews" element={<ReviewManager />} />
+          <Route path="/admin/users" element={<UserManager />} />
+        </Routes>
       </div>
-    ))
-  ) : (
-    <p>No books found.</p>
-  )}
-</div>
-
-  
-    </div>
+    </Router>
   );
-}
+};
 
 export default App;
