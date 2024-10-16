@@ -21,13 +21,13 @@ const BookManager = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewBook((prevBook) => ({ ...prevBook, [name]: value }));
+    setNewBook((prevBook) => ({ ...prevBook, [name]: value })); // updates the newbook state. 
   };
 
   const handleAddBook = async () => {
     try {
       await axios.post('/books', newBook);
-      fetchBooks(); // Refresh the list
+      fetchBooks(); // Refresh the list of books in the user interface 
     } catch (error) {
       console.error('Error adding book:', error);
     }

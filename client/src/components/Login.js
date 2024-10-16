@@ -10,32 +10,36 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await api.post('/login', { email, password });
-      console.log(response.data); // Handle login response
+      console.log(response.data); 
     } catch (error) {
       console.error('Error logging in:', error);
     }
   };
 
   return (
-    <div>
-      <h2>Login</h2>
+    <div class='container'>
+      <div id='centered-container' class='container'>
+      <div class='container'>
+      <h2 class='login'>Login</h2>
       <form onSubmit={handleLogin}>
-        <input
+        <input class='input-container'
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           required
         />
-        <input
+        <input  class='input-container'
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
         />
-        <button type="submit">Login</button>
+        <button class='btn btn-success btn-sm' type="submit">Login</button>
       </form>
+    </div>
+      </div>
     </div>
   );
 };

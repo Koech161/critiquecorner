@@ -8,6 +8,7 @@ import UserManager from './components/UserManager';
 import AdminPanel from './components/AdminPanel';
 import Login from './components/Login';
 import Register from './components/Register';
+import BookDisplay from './components/BookDisplay';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -19,6 +20,7 @@ const App = () => {
         <Routes>
           {/* Use element instead of component */}
           <Route path="/" element={<Homepage />} />
+          <Route path="/books" element={<BookDisplay/>}/>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPanel />} />

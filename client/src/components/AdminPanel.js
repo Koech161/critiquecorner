@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//import './AdminPanel.css';
+import './AdminPanel.css';
 
 const AdminPanel = () => {
   return (
-    <div className="admin-panel">
+    <div class='container'>
+      <div class="contianer">
       <h1>Admin Panel</h1>
       <ul>
         <li><Link to="/admin/books">Manage Books</Link></li>
@@ -12,6 +13,7 @@ const AdminPanel = () => {
         <li><Link to="/admin/users">Manage Users</Link></li>
       </ul>
     </div>
+        </div>
   );
 };
 

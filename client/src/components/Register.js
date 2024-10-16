@@ -11,39 +11,43 @@ const Register = () => {
     e.preventDefault();
     try {
       const response = await api.post('/register', { username, email, password });
-      console.log(response.data); // Handle registration response
+      console.log(response.data); 
     } catch (error) {
       console.error('Error registering:', error);
     }
   };
 
   return (
-    <div>
-      <h2>Register</h2>
+    <div  class= 'container'>
+    <div id='centered-container' class = 'container'>
+      <div class='container'>
+      <h2 >Register</h2>
       <form onSubmit={handleRegister}>
-        <input
+        <input class='input-container'
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
           required
         />
-        <input
+        <input class='input-container'
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Email"
           required
         />
-        <input
+        <input class='input-container'
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
         />
-        <button type="submit">Register</button>
+        <button class='btn btn-success btn-sm' type="submit">Register</button>
       </form>
+      </div>
+    </div>
     </div>
   );
 };
