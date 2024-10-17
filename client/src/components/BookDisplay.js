@@ -21,7 +21,9 @@ const BookDisplay = () => {
 
     return (
         <div className='container'>
-            <h1>Books List</h1>
+            <div className='book-list'>
+                <h1>Books List</h1></div>
+            <div className='book-list-container'>
             <div className='book-list'>
                 {Array.isArray(books) && books.length === 0 ? (
                     <p>No books found.</p>
@@ -37,6 +39,7 @@ const BookDisplay = () => {
                         </div>
                     ))
                 )}
+            </div>
             </div>
         </div> 
     );

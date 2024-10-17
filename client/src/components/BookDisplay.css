@@ -1,44 +1,45 @@
-/* .container{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.book-item{
-
-} */
-
-/* Container for the overall layout */
 .container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Create 3 equal columns */
-    gap: 20px; /* Space between items */
-    padding: 20px; /* Padding around the container */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
 }
 
-/* Individual book item styles */
+.book-list h1 {
+    margin-bottom: 20px;
+}
+
+.book-list-container {
+    display: flex; 
+    flex-wrap: wrap; 
+    justify-content: flex-start; 
+    gap: 20px; 
+    width: 100%; 
+}
+
 .book-item {
-    border: 1px solid #ccc; /* Border around each book item */
-    border-radius: 8px; /* Rounded corners */
-    overflow: hidden; /* Prevent overflow */
-    text-align: center; /* Center text */
-    background-color: #fff; /* Background color */
-    transition: transform 0.3s; /* Transition for hover effect */
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    text-align: center; 
+    background-color: #fff; 
+    transition: transform 0.3s; 
+    padding: 20px;
+    width: calc(25% - 20px);
+    margin: 15px;
 }
 
-/* Image styles */
 .book-item img {
-    width: 100%; /* Make the image fill the container */
-    height: auto; /* Maintain aspect ratio */
-    object-fit: cover; /* Ensure the image covers the space */
+    width: 100%; 
+    height: auto; 
+    object-fit: cover; 
 }
 
-/* Title styles */
 .book-item h2 {
-    font-size: 1.2em; /* Adjust font size */
-    margin: 10px 0; /* Margin around title */
+    font-size: 1.2em; 
+    margin: 10px 0; 
 }
 
-/* Hover effect for book items */
 .book-item:hover {
-    transform: scale(1.05); /* Slightly scale up on hover */
+    transform: scale(1.05); 
 }
