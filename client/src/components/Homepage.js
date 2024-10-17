@@ -12,8 +12,10 @@ const Homepage = () => {
 
   return (
     <div className="homepage">
+      <div className='intro-container'>
       <h1>Welcome to the Book Review Website</h1>
       <p>Explore our collection of books and reviews. Join our community to share your thoughts!</p>
+      </div>
       <button className="explore-button" onClick={handleExploreButton}>Explore Books</button>
     </div>
   );

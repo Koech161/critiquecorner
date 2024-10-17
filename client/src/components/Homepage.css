@@ -1,53 +1,39 @@
 .homepage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: #f5f5f5;
-    text-align: center;
-    position: relative; 
-  }
-  
-  .cover-photo {
-    position: absolute; 
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    z-index: -1; 
-  }
-  
-  .homepage h1 {
-    font-size: 2.5rem;
-    color: #4a4e69;
-    position: relative; 
-    z-index: 1;
-  }
-  
-  .homepage p {
-    font-size: 1.2rem;
-    margin: 1rem 0;
-    color: #333;
-    position: relative; 
-    z-index: 1;
-  }
-  
-  .explore-button {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    color: #fff;
-    background-color: #4a4e69;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    position: relative; 
-    z-index: 1;
-  }
-  
-  .explore-button:hover {
-    background-color: #f9ae3b;
-  }
-  
+  background-image: url('https://www.sae.org/binaries/content/gallery/cm/content/publications/books/books_mini_hero.png/books_mini_hero.png/cm:miniHeroWeb'); /* Adjust this path based on your image location */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}
+.intro-container{
+  margin-top: -130px ;
+}
+.intro-container p{
+color:#00458b;
+font-weight:500;
+}
+.intro-container h1{
+  color:#00458b;
+}
+.explore-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #17a2b8;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.explore-button:hover {
+  background-color: #17a2b8;
+  /* transition: transform 0.2s;  */
+}

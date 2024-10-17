@@ -47,7 +47,7 @@ const Register = () => {
             required
           />
           <div className='button-container'>
-            <button className='btn btn-success btn-lg w-100' type="submit">Register</button>
+            <button className='btn btn-info btn-lg w-100' type="submit">Register</button>
           </div>
         </form>
       </div>

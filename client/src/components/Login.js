@@ -38,7 +38,7 @@ const Login = () => {
             required
           />
           <div className='button-container'>
-            <button className='btn btn-success btn-sm custom-button' type="submit">Login</button>
+            <button className='btn btn-info btn-sm custom-button' type="submit">Login</button>
           </div>
         </form>
       </div>

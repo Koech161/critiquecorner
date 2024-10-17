@@ -10,7 +10,7 @@ const BookDisplay = () => {
             try {
                 const response = await api.get('/books'); 
                 console.log(response.data); 
-                setBooks(response.data); 
+                setBooks(response.data.books); 
             } catch (error) {
                 console.error('Error fetching books:', error);
             }
