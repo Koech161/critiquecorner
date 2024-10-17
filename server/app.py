@@ -86,6 +86,9 @@ class MyModelView(ModelView):
     can_delete =True
 class BookModelView(MyModelView):
     form_columns = ['title', 'image_filename', 'author_id', 'published_at']
+    column_searchable_list = ['title', 'author.id']
+    column_filters = ['author_id', 'published_at']
+
 
     def create_form(self):
         form = super(BookModelView, self).create_form()
@@ -103,15 +106,22 @@ class BookModelView(MyModelView):
 
 class ReviewModelView(MyModelView):
     form_columns = ['content', 'rating', 'user_id', 'book_id']
+    column_searchable_list = ['content', 'rating']
+    column_filters = ['user_id', 'book_id']
 
 class UserModelView(MyModelView):
     form_columns = ['username', 'email', 'password']
+    column_searchable_list = ['username', 'email']
+    column_filters =['username']
 
 class AuthorModelView(MyModelView):
     form_columns = ['name']
+    column_searchable_list = ['name']
 
 class UsersBookModelView(MyModelView):
     form_columns = ['user_id', 'book_id', 'date_added']   
+    column_searchable_list = ['user_id', 'book_id']
+    column_filters = ['user_id', 'book_id']
 
 
 admin = Admin(app, name='CritiqueCorner Admin', template_mode='bootstrap3')
@@ -190,7 +200,7 @@ class AddBook(Resource):
             return {'Adding book error': str(e)}, 500
         
      #Only Authenticated User should view books and add reviews   
-    # @jwt_required
+    #@jwt_required
     def get(self):
         books = Book.query.all()
         print(books)
@@ -202,19 +212,36 @@ class AddBook(Resource):
             return {'error': 'No books found'} ,404
 
 class BookByID(Resource):
+
+    # @jwt_required
+    def get(self, id):
+        book = Book.query.get_or_404(id)
+      
+        author_name = book.author.name if book.author else 'unknown'
+        reviews = Review.query.filter_by(book_id=book.id).all()
+        book_info = {
+            'title': book.title,
+            'image_url':book.image_filename,
+            'published at':book.published_at.isoformat(),
+            'author':{
+                'id': book.author.id,
+                'name': author_name
+            },
+            'review': [{'content': review.content, 'rating': review.rating} for review in reviews]
+        }
+      
+        return jsonify(book_info)
     #@jwt_required
     def delete(self, id):
-        book = Book.query.get(id)
-        if not book:
-            return {'error': 'No book found'},404
+        book = Book.query.get_or_404(id)
+    
         db.session.delete(book)  
         db.session.commit()
         return {'message': f'Book {book.title} deleted successfully'}, 200
    # @jwt_required
     def patch(self, id):
-        book = Book.query.get(id)
-        if not book:
-            return {'error': 'No book found'}, 404
+        book = Book.query.get_or_404(id)
+    
         data = request.get_json()
         if not data:
             return {'error': 'No data provided'}
@@ -354,4 +381,4 @@ api.add_resource(UsersBooks, '/usersbooks')
     
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5555, debug=True)

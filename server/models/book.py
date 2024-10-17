@@ -20,7 +20,7 @@ class Book(db.Model):
             'title': self.title,
             'image_filename':self.image_filename,
             'author_id': self.author_id,
-            'published_at': self.published_at,
+            'published_at': self.published_at.isoformat(),
         }
     def __repr__(self):
-        return f'<Book {self.id}, {self.title}, {self.author_id}, {self.published_at}>'
+        return f'<Book {self.id}, {self.title}, {self.author_id}, {self.published_at.isoformat()}>'
