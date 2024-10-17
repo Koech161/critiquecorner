@@ -10,3 +10,4 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False) 
 
     reviews = db.relationship('Review', back_populates='user', cascade='all, delete-orphan')   
+    

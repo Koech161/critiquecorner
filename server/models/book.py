@@ -20,3 +20,4 @@ class Book(db.Model):
             'image_filename':self.image_filename,
             'puplished_at': self.published_at,
         }
+        
