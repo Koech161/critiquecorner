@@ -22,7 +22,7 @@ const Register = () => {
       <div id='centered-container'>
         <h2>Register</h2>
         <form onSubmit={handleRegister}>
-          <input
+          <input 
             className='input-container'
             type="text"
             value={username}
@@ -30,7 +30,7 @@ const Register = () => {
             placeholder="Username"
             required
           />
-          <input
+          <input 
             className='input-container'
             type="email"
             value={email}
@@ -38,7 +38,7 @@ const Register = () => {
             placeholder="Email"
             required
           />
-          <input
+          <input 
             className='input-container'
             type="password"
             value={password}
@@ -47,7 +47,7 @@ const Register = () => {
             required
           />
           <div className='button-container'>
-          <button className='btn btn-success btn-sm custom-button' type="submit">Register</button>
+            <button className='btn btn-success btn-lg w-100' type="submit">Register</button>
           </div>
         </form>
       </div>

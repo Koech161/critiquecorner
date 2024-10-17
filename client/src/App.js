@@ -12,13 +12,13 @@ import BookDisplay from './components/BookDisplay';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
+
 const App = () => {
   return (
     <Router>
       <div>
         <Navbar />
         <Routes>
-          {/* Use element instead of component */}
           <Route path="/" element={<Homepage />} />
           <Route path="/books" element={<BookDisplay/>}/>
           <Route path="/login" element={<Login />} />

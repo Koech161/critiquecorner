@@ -1,5 +1,5 @@
 .container {
-  padding: 15px;
+  padding: 1px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,9 +8,9 @@
 .input-container {
   display: block;
   padding: 10px;
-  width: 120%;
+  width: 100%; 
   border: 1px solid #ccc;
-  margin: 15px 0; /* Adjusted for better vertical spacing */
+  margin: 15px 0; 
   border-radius: 4px;
 }
 
@@ -18,13 +18,16 @@
   margin: 50px;
   background-color: #ffffff;
   padding: 20px;
+  border-radius: 8px; 
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
 }
-.custom-button {
-  width: 120%; 
-  margin-left: -10%; 
-}
-.button-container{
-  display:flex;
+
+.button-container {
+  display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.btn {
+  width: 100%; 
 }
