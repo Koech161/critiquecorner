@@ -63,7 +63,7 @@ const Login = () => {
               />
               {formik.errors.password && <div className="invalid-feedback">{formik.errors.password}</div>}
             </div>
-            <button type="submit" className="btn btn-primary w-100">Login</button>
+            <button type="submit" className="btn btn-success w-100">Login</button>
           </form>
         </div>
       </div>

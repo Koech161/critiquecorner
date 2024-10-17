@@ -11,13 +11,13 @@ import Register from './components/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
+
 const App = () => {
   return (
     <Router>
       <div>
         <Navbar />
         <Routes>
-          {/* Use element instead of component */}
           <Route path="/" element={<Homepage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

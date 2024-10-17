@@ -63,7 +63,7 @@ def jwt_required(f):
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             g.current_user = User.query.get(data['user_id'])
-            print(g.current_user)
+    
         except Exception:
             return  {'message': 'Token is invalid or expired'}, 403
         return f(*args, **kwargs) 
@@ -75,7 +75,8 @@ def jwt_required(f):
 #admin_dash_board
 class MyModelView(ModelView):
     def is_accessible(self):
-        #return hasattr(g, 'current_user') and g.current_user is not None 
+         
+        # return hasattr(g, 'current_user') and g.current_user is not None 
         return True
    
     def access_denied(self):
@@ -163,7 +164,7 @@ class Login(Resource):
        return {'user logout'}   
     # Admin is the only to add book
 class AddBook(Resource):
-    #@jwt_required
+    @jwt_required
     def post(self):
 
         if 'file'  not in request.files:
