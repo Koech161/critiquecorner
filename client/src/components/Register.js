@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import api from '../services/api';
 import './Register.css';
 
 const Register = () => {
+  const [emailCheck, setEmailCheck] = useState('')
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -17,12 +18,19 @@ const Register = () => {
       password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
     }),
     onSubmit: async (values) => {
+      setEmailCheck('')
       try {
+        const emailCheckResponse = await api.post('/check-email', {email: values.email});
+        if (emailCheckResponse.data.exists) {
+          setEmailCheck('Email is already registered.');
+          return;
+        }
         const response = await api.post('/users', values);
         console.log(response.data); 
       
       } catch (error) {
         console.error('Error registering:', error);
+        setEmailCheck('Email already registered.');
       
       }
     },
@@ -73,6 +81,7 @@ const Register = () => {
               />
               {formik.errors.password && <div className="invalid-feedback">{formik.errors.password}</div>}
             </div>
+            {emailCheck && <div className="alert alert-danger">{emailCheck}</div>}
             <button type="submit" className="btn btn-primary w-100">Register</button>
           </form>
         </div>
