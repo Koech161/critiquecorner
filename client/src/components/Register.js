@@ -3,9 +3,12 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import api from '../services/api';
 import './Register.css';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const navigate = useNavigate()
   const [emailCheck, setEmailCheck] = useState('')
+  const [loading, setLoading] =useState(false)
   const formik = useFormik({
     initialValues: {
       username: '',
@@ -19,19 +22,24 @@ const Register = () => {
     }),
     onSubmit: async (values) => {
       setEmailCheck('')
+      setLoading(true)
       try {
-        const emailCheckResponse = await api.post('/check-email', {email: values.email});
+        const emailCheckResponse = await api.post('/check_email', {email: values.email});
         if (emailCheckResponse.data.exists) {
           setEmailCheck('Email is already registered.');
+          setLoading(false)
           return;
         }
         const response = await api.post('/users', values);
-        console.log(response.data); 
-      
+        console.log(response.data);
+        navigate('/login')
       } catch (error) {
         console.error('Error registering:', error);
         setEmailCheck('Email already registered.');
       
+      }
+      finally{
+        setLoading(false)
       }
     },
   });

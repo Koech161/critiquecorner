@@ -6,11 +6,16 @@ import Login from './components/Login';
 import Register from './components/Register';
 import BookDisplay from './components/BookDisplay';
 import BookDetails from './components/BookDetails';
+import { AuthProvider } from './components/AuthProvider';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 
 const App = () => {
   return (
+    <AuthProvider>
+
+   
     <Router>
       <div>
         <Navbar />
@@ -19,10 +24,15 @@ const App = () => {
           <Route path="/books" element={<BookDisplay/>}/>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path='/bookdetails/:id' element={<BookDetails />} />
+          <Route path='/bookdetails/:id' 
+          element={
+            <ProtectedRoute element={<BookDetails />} />
+          } />
+          
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
   );
 };
 

@@ -2,19 +2,26 @@ import React, { useEffect, useState } from 'react';
 // import './BookDisplay.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Formik } from 'formik';
+
+import { useAuth } from './AuthProvider';
 
 
 const BookDisplay = () => {
     const [books, setBooks] = useState([]);
-    const [search, setSearch] = useState('')
-    const navigate = useNavigate();
+    // const [search, setSearch] = useState('')
+    const navigate = useNavigate()
+    const { token }= useAuth()
+
 
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const response = await axios.get('/books'); 
-                console.log(response.data); 
+                const response = await axios.get('/books',{
+                    headers: {
+                        Authorization: `Bearer ${token}` 
+                    }
+                }); 
+             
                 setBooks(response.data); 
             } catch (error) {
                 console.error('Error fetching books:', error);
@@ -22,7 +29,7 @@ const BookDisplay = () => {
         };
 
         fetchBooks();
-    }, []);
+    }, [token]);
 
     const handleNavigation = (id) => {
         navigate(`/bookdetails/${id}`);

@@ -1,12 +1,19 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import api from '../services/api';
 import './Login.css';
+import { useAuth } from './AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const formik = useFormik({
+  const { login } = useAuth()
+  const navigate = useNavigate()
+  const [errorMessage, setErrorMessage] = useState('')
+  const [loading, setLoading] =  useState(false)
+
+    const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -20,17 +27,30 @@ const Login = () => {
         .required('Required'),
     }),
     onSubmit: async (values) => {
+      setLoading(true)
+      setErrorMessage('')
       try {
         const response = await api.post('/login', values);
          
-        
-        
         localStorage.setItem('token', response.data.token); 
         localStorage.setItem('userId', response.data.user);
         
+        login(response.data.token)
+        navigate('/')
+        
       } catch (error) {
         console.error('Error logging in:', error);
-      
+        if (error.response) {
+          console.error('Response data:', error.response.data);
+          console.error('Response status:', error.response.status);
+          setErrorMessage(error.response.data.message || 'Invalid email or password. Please try again.');
+        } else {
+          console.error('Error message:', error.message);
+          setErrorMessage('An unexpected error occurred. Please try again later.');
+        }
+      }
+      finally{
+        setLoading(false)
       }
     },
   });
@@ -40,6 +60,11 @@ const Login = () => {
       <div className="card" style={{ width: '30rem' }}>
         <div className="card-body">
           <h2 className="card-title text-center">Login</h2>
+          {errorMessage && (
+            <div className='alert alert-danger' role="alert" aria-live="assertive">
+              {errorMessage}
+            </div>
+          )}
           <form onSubmit={formik.handleSubmit}>
             <div className="mb-3">
               <label htmlFor="email" className="form-label">Email</label>
@@ -67,7 +92,8 @@ const Login = () => {
               />
               {formik.errors.password && <div className="invalid-feedback">{formik.errors.password}</div>}
             </div>
-            <button type="submit" className="btn btn-success w-100">Login</button>
+            <button type="submit" className="btn btn-success w-100">
+              {loading ? 'Loggong in..': 'Login'}</button>
           </form>
         </div>
       </div>

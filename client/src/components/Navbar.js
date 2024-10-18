@@ -1,10 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css'; 
+import { useAuth } from './AuthProvider';
 
 const Navbar = () => {
+  const { isAuthenticated, logout} = useAuth()
+  const navigate = useNavigate()
   const adminEndPoint = process.env.ADMIN_ENDPOINT || 'http://127.0.0.1:5555/admin';
-  console.log('endpoint:', adminEndPoint);
+
+  const handleLogout = () =>{
+    logout()
+    navigate('/')
+
+ }
   
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
@@ -18,15 +26,29 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/">Home</Link>
             </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/login">Login</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/register">Register</Link>
-            </li>
-            <li className="nav-item">
+            {isAuthenticated ? (
+              <>
+                <li className="nav-item">
+                  <button className="nav-link btn btn-link" onClick={handleLogout}>Logout</button>
+
+                </li>
+                <li className="nav-item">
               <a className="nav-link" href={adminEndPoint} target="_blank" rel="noopener noreferrer">Admin Panel</a>
             </li>
+                
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/login">Login</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/register">Register</Link>
+                </li>
+              </>
+            )}
+            
+            
           </ul>
         </div>
       </div>

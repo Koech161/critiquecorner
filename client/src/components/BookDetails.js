@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useUser } from './UserContext';
+import { useAuth } from './AuthProvider';
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -12,12 +13,17 @@ const BookDetails = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [editingReview, setEditingReview] = useState(null);
     const { currentUser} = useUser()
+    const { token } = useAuth()
     
 
     useEffect(() => {
         const fetchBookInfo = async () => {
             try {
-                const response = await axios.get(`/books/${id}`);
+                const response = await axios.get(`/books/${id}`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 setBookInfo(response.data);
             } catch (error) {
                 console.error('Error fetching book details:', error);
@@ -26,7 +32,7 @@ const BookDetails = () => {
         };
 
         fetchBookInfo();
-    }, [id]);
+    }, [id, token]);
 
     const handleReviewSubmit = async (values, { resetForm }) => {
         if (!currentUser) {
@@ -34,7 +40,7 @@ const BookDetails = () => {
             return;
         }
         try {
-            const token = localStorage.getItem('token');
+            // const token = localStorage.getItem('token');
             if (editingReview) {
                
                 await axios.patch(`/reviews/${id}`, {
@@ -76,7 +82,7 @@ const BookDetails = () => {
                 setSuccessMessage('Review deleted successfully')
                 setBookInfo((prevBookInfo) =>({
                     ...prevBookInfo,
-                    reviews: bookInfo.review.filter(rev => rev.id !=id)
+                    reviews: bookInfo.review.filter(rev => rev.id !==id)
                 }))
             
         } catch (error) {

@@ -6,7 +6,7 @@ from models.author import Author
 from models.userbook import UsersBook
 from config import db
 from flask_migrate import Migrate
-from flask_restful import Api, Resource
+from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 import jwt
 from functools import wraps
@@ -64,7 +64,8 @@ def jwt_required(f):
             data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
             g.current_user = User.query.get(data['user_id'])
     
-        except Exception:
+        except Exception as e:
+            print(f'Token decoding error: {e}')
             return  {'message': 'Token is invalid or expired'}, 403
         return f(*args, **kwargs) 
     return decorated
@@ -163,7 +164,7 @@ class Login(Resource):
 
         if user and check_password_hash(user.password, password):
 
-            expiration_time =  datetime.utcnow() + timedelta(minutes=2)
+            expiration_time =  datetime.utcnow() + timedelta(days=7)
 
             token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256')
 
@@ -174,7 +175,7 @@ class Login(Resource):
        return {'user logout'}   
     
 class UserByID(Resource):
-    #@jwt_required
+    @jwt_required
     def get(self,id):
         user = User.query.get_or_404(id)
         userInfo = {
@@ -185,7 +186,7 @@ class UserByID(Resource):
         return jsonify(userInfo)
     # Admin is the only to add book
 class AddBook(Resource):
-    #@jwt_required
+    @jwt_required
     def post(self):
 
         if 'file'  not in request.files:
@@ -224,7 +225,7 @@ class AddBook(Resource):
 
 class BookByID(Resource):
 
-    # @jwt_required
+    @jwt_required
     def get(self, id):
         book = Book.query.get_or_404(id)
       
@@ -243,14 +244,14 @@ class BookByID(Resource):
         }
       
         return jsonify(book_info)
-    #@jwt_required
+    @jwt_required
     def delete(self, id):
         book = Book.query.get_or_404(id)
     
         db.session.delete(book)  
         db.session.commit()
         return {'message': f'Book {book.title} deleted successfully'}, 200
-   # @jwt_required
+    @jwt_required
     def patch(self, id):
         book = Book.query.get_or_404(id)
     
@@ -269,7 +270,7 @@ class BookByID(Resource):
 # Users should add the reviews
 class AddReview(Resource):
 
-    #@jwt_required
+    @jwt_required
     def get(self):
         reviews = Review.query.all()
         if not reviews:
@@ -277,7 +278,7 @@ class AddReview(Resource):
         return reviews.to_dict(), 200
 
 
-    #@jwt_required
+    @jwt_required
     def post(self):
         data = request.get_json()
         content = data.get('content')
@@ -297,7 +298,7 @@ class AddReview(Resource):
             return {'error': str(e)},500
 
 class ReviewByID(Resource):
-    #@jwt_required
+    @jwt_required
     def patch(self, id):
         review = Review.query.get(id)
         if not review:
@@ -314,7 +315,7 @@ class ReviewByID(Resource):
         except Exception as e:
             db.session.rollback()
             return {'error updating review':str(e)}, 500  
-    #@jwt_required
+    @jwt_required
     def delete(self, id):
         review = Review.query.get(id)
         if not review:
@@ -324,7 +325,7 @@ class ReviewByID(Resource):
         return {'message':'Review deleted succesfully'}, 200   
         
 class Authors(Resource):
-    #@jwt_required
+    @jwt_required
     def get(self):
         authors = Author.query.all()
         if not Authors:
@@ -332,7 +333,7 @@ class Authors(Resource):
         author_dict = [author.to_dict() for author in authors]
 
         return jsonify(author_dict)
-    #@jwt_required
+    @jwt_required
     def post(self):
         data = request.get_json()
 
@@ -374,7 +375,14 @@ class UsersBooks(Resource):
             db.session.rollback()
             return {'error': str(e)}, 500
         
-
+class CheckEmail(Resource):
+    def post(self):
+        data = request.get_json()
+        email= data.get('email')
+        if not email:
+            return {'message': 'Email is required'},404
+        user_exists = User.query.filter_by(email=email).first()
+        return {'exists': bool(user_exists)}
                  
         
 
@@ -390,6 +398,7 @@ api.add_resource(AddReview, '/reviews')
 api.add_resource(ReviewByID, '/reviews/<int:id>')
 api.add_resource(Authors, '/authors')
 api.add_resource(UsersBooks, '/usersbooks')
+api.add_resource(CheckEmail, '/check_email')
 
     
 
