@@ -12,7 +12,6 @@ const BookDetails = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [editingReview, setEditingReview] = useState(null);
     const { currentUser} = useUser()
-    console.log('kwadetailes,', currentUser);
     
 
     useEffect(() => {

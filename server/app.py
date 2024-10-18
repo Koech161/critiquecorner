@@ -76,8 +76,8 @@ def jwt_required(f):
 class MyModelView(ModelView):
     def is_accessible(self):
          
-        return hasattr(g, 'current_user') and g.current_user is not None 
-        # return True
+        #return hasattr(g, 'current_user') and g.current_user is not None 
+        return True
    
     def access_denied(self):
         return redirect(url_for('home'))
