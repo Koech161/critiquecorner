@@ -1,64 +1,7 @@
-// import React, { useEffect, useState } from 'react';
-// import api from '../services/api';
-// import './BookDisplay.css';
-// import { useNavigate } from 'react-router-dom';
-
-// const BookDisplay = () => {
-//     const [books, setBooks] = useState([]);
-//     const navigate = useNavigate()
-
-//     useEffect(() => {
-//         const fetchBooks = async () => {
-//             try {
-//                 const response = await api.get('/books'); 
-//                 console.log(response.data); 
-//                 setBooks(response.data); 
-//             } catch (error) {
-//                 console.error('Error fetching books:', error);
-//             }
-//         };
-
-//         fetchBooks();
-//     }, []);
-
-//     const handleNavigation = (id) =>{
-//         navigate(`/bookdetails/${id}`)
-//     }
-
-//     return (
-//         <div className=''>
-//             <div className='book-list'>
-//                 <h1 className='text-center'>Books List</h1></div>
-//             <div className='book-list-container'>
-//             <div className='book-list row '>
-//                 {Array.isArray(books) && books.length === 0 ? (
-//                     <p>No books found.</p>
-//                 ) : (
-//                     books.map((book) => (
-//                         <div key={book.id} className='book-item col-md-3' onClick={() =>handleNavigation(book.id)}>
-//                             <div>
-//                                 <h2>{book.title}</h2>
-//                             </div>
-//                             <div>
-//                                 <img src={book.image_filename} alt={book.title} />
-//                             </div>
-                            
-//                         </div>
-//                     ))
-//                 )}
-//             </div>
-//             </div>
-//         </div> 
-//     );
-// };
-
-// export default BookDisplay;
-
-
 import React, { useEffect, useState } from 'react';
-import api from '../services/api';
 // import './BookDisplay.css';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const BookDisplay = () => {
     const [books, setBooks] = useState([]);
@@ -67,7 +10,7 @@ const BookDisplay = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const response = await api.get('/books'); 
+                const response = await axios.get('/books'); 
                 console.log(response.data); 
                 setBooks(response.data); 
             } catch (error) {
@@ -83,7 +26,7 @@ const BookDisplay = () => {
     };
 
     return (
-        <div className='container'>
+        <div className='container' style={{marginTop:'100px'}}>
             <h1 className='text-center my-4'>Books List</h1>
             <div className='row'>
                 {Array.isArray(books) && books.length === 0 ? (

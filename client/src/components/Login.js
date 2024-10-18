@@ -22,7 +22,11 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await api.post('/login', values);
-        console.log(response.data); 
+        // console.log(response.data); 
+        
+        
+        localStorage.setItem('token', response.data.token); 
+        localStorage.setItem('userId', response.data.user);
         
       } catch (error) {
         console.error('Error logging in:', error);

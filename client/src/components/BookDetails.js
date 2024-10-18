@@ -1,11 +1,9 @@
-
-
-
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { useUser } from './UserContext';
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -13,6 +11,9 @@ const BookDetails = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
     const [editingReview, setEditingReview] = useState(null);
+    const { currentUser} = useUser()
+    console.log('kwadetailes,', currentUser);
+    
 
     useEffect(() => {
         const fetchBookInfo = async () => {
@@ -29,25 +30,29 @@ const BookDetails = () => {
     }, [id]);
 
     const handleReviewSubmit = async (values, { resetForm }) => {
+        if (!currentUser) {
+            setError('You must be logged in to submit a review.');
+            return;
+        }
         try {
             const token = localStorage.getItem('token');
             if (editingReview) {
-                // Update existing review
+               
                 await axios.patch(`/reviews/${id}`, {
                     content: values.content,
                     rating: values.rating,
-                    user_id: 1, 
+                    user_id: currentUser.id, 
                     book_id: id
                 }, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setSuccessMessage('Review updated successfully!');
             } else {
-                // Add new review
+               
                 await axios.post('/reviews', {
                     content: values.content,
                     rating: values.rating,
-                    user_id: 1, 
+                    user_id: currentUser.id, 
                     book_id: id
                 }, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -87,9 +92,10 @@ const BookDetails = () => {
     }
 
     const reviews = Array.isArray(bookInfo.review) ? bookInfo.review : [];
+    // const ralatedBooks = Array.isArray(bookInfo.author.id) ? bookInfo.author.name : []
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5" style={{marginTop: '80px'}}>
             <div className="card mb-4">
                 <div className="row g-0">
                     <div className="col-md-4">
@@ -110,7 +116,9 @@ const BookDetails = () => {
                                 {reviews.length > 0 ? (
                                     reviews.map((review, index) => (
                                         <li key={index} className="list-group-item">
+                                        
                                             <strong>Rating: </strong>
+                                            <em>by {review.username}</em>
                                             {renderStars(review.rating)}
                                             <p>{review.content}</p>
                                             <button 

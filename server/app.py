@@ -76,8 +76,8 @@ def jwt_required(f):
 class MyModelView(ModelView):
     def is_accessible(self):
          
-        # return hasattr(g, 'current_user') and g.current_user is not None 
-        return True
+        return hasattr(g, 'current_user') and g.current_user is not None 
+        # return True
    
     def access_denied(self):
         return redirect(url_for('home'))
@@ -167,14 +167,25 @@ class Login(Resource):
 
             token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256')
 
-            return {'message': 'Login succesfully', 'token': token}, 201
+            return {'message': 'Login succesfully', 'token': token, 'user': user.id}, 201
         else:
             return {'error': 'Invalid user credentials'}, 400
     def delete(self):
        return {'user logout'}   
+    
+class UserByID(Resource):
+    #@jwt_required
+    def get(self,id):
+        user = User.query.get_or_404(id)
+        userInfo = {
+            'id':user.id,
+            'username': user.username,
+            'email': user.email,
+        }  
+        return jsonify(userInfo)
     # Admin is the only to add book
 class AddBook(Resource):
-    @jwt_required
+    #@jwt_required
     def post(self):
 
         if 'file'  not in request.files:
@@ -219,6 +230,7 @@ class BookByID(Resource):
       
         author_name = book.author.name if book.author else 'unknown'
         reviews = Review.query.filter_by(book_id=book.id).all()
+       
         book_info = {
             'title': book.title,
             'image_url':book.image_filename,
@@ -227,7 +239,7 @@ class BookByID(Resource):
                 'id': book.author.id,
                 'name': author_name
             },
-            'review': [{'content': review.content, 'rating': review.rating} for review in reviews]
+            'review': [{'content': review.content, 'rating': review.rating, 'username': review.user.username} for review in reviews]
         }
       
         return jsonify(book_info)
@@ -371,6 +383,7 @@ class UsersBooks(Resource):
 api.add_resource(Home, '/')
 api.add_resource(Register, '/users') 
 api.add_resource(Login, '/login')  
+api.add_resource(UserByID, '/users/<int:id>')
 api.add_resource(AddBook, '/books') 
 api.add_resource(BookByID, '/books/<int:id>')
 api.add_resource(AddReview, '/reviews')
