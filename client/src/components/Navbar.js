@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import './Navbar.css'; 
 
 const Navbar = () => {
+  const adminEndPoint = process.env.ADMIN_ENDPOINT || 'http://127.0.0.1:5555/admin';
+  console.log('endpoint:', adminEndPoint);
+  
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top">
       <div className="container-fluid">
@@ -22,7 +25,7 @@ const Navbar = () => {
               <Link className="nav-link" to="/register">Register</Link>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="http://127.0.0.1:5555/admin" target="_blank" rel="noopener noreferrer">Admin Panel</a>
+              <a className="nav-link" href={adminEndPoint} target="_blank" rel="noopener noreferrer">Admin Panel</a>
             </li>
           </ul>
         </div>
