@@ -175,7 +175,7 @@ class Login(Resource):
        return {'user logout'}   
     
 class UserByID(Resource):
-    @jwt_required
+    #@jwt_required
     def get(self,id):
         user = User.query.get_or_404(id)
         userInfo = {
