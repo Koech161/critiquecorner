@@ -69,6 +69,22 @@ const BookDetails = () => {
     const handleEditReview = (review) => {
         setEditingReview(review);
     };
+    
+    const handleDeleteReview = async (id) =>{
+        try {
+            const response = await axios.delete(`reviews/${id}`)
+                setSuccessMessage('Review deleted successfully')
+                setBookInfo((prevBookInfo) =>({
+                    ...prevBookInfo,
+                    reviews: bookInfo.review.filter(rev => rev.id !=id)
+                }))
+            
+        } catch (error) {
+            console.error('error deleteing review',error);
+            setError('error deleting review')
+            
+        }
+    }
 
     const renderStars = (rating) => {
         const stars = [];
@@ -124,7 +140,14 @@ const BookDetails = () => {
                                                 className="btn btn-link" 
                                                 onClick={() => handleEditReview(review)}
                                             >
-                                                Edit
+                                               <span role="img" aria-label="edit">
+                                                        ✏️
+                                                 </span>
+                                            </button>
+                                            <button className='btn btn-link' onClick={() => handleDeleteReview(review.id)}>
+                                            <span role="img" aria-label="delete">
+                                                🗑
+                                            </span>
                                             </button>
                                         </li>
                                     ))
@@ -176,3 +199,4 @@ const BookDetails = () => {
 };
 
 export default BookDetails;
+

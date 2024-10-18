@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 // import './BookDisplay.css';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Formik } from 'formik';
+
 
 const BookDisplay = () => {
     const [books, setBooks] = useState([]);
+    const [search, setSearch] = useState('')
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,10 +27,20 @@ const BookDisplay = () => {
     const handleNavigation = (id) => {
         navigate(`/bookdetails/${id}`);
     };
+    // const filteredbooks = books.filter(book => {
+    //     book.title.toLowerCase().includes(search.toLowerCase())
+    // })
+    // setBooks(filteredbooks)
 
     return (
         <div className='container' style={{marginTop:'100px'}}>
             <h1 className='text-center my-4'>Books List</h1>
+            {/* <input
+            type='text'
+            id='search'
+            name='search'
+            value={setSearch}
+            /> */}
             <div className='row'>
                 {Array.isArray(books) && books.length === 0 ? (
                     <p>No books found.</p>

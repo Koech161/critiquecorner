@@ -163,7 +163,7 @@ class Login(Resource):
 
         if user and check_password_hash(user.password, password):
 
-            expiration_time =  datetime.utcnow() + timedelta(days=7)
+            expiration_time =  datetime.utcnow() + timedelta(minutes=2)
 
             token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256')
 

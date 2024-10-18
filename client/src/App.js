@@ -20,9 +20,6 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path='/bookdetails/:id' element={<BookDetails />} />
-          {/* <Route path="/admin/books" element={<BookManager />} />
-          <Route path="/admin/reviews" element={<ReviewManager />} />
-          <Route path="/admin/users" element={<UserManager />} /> */}
         </Routes>
       </div>
     </Router>
