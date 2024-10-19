@@ -212,10 +212,10 @@ const BookDetails = () => {
                 </div>
             </div>
             <h3 className='text-center title'>Related Books: </h3>
-            <div className='row'>
+            <div className='row g-3'>
             {related_books.map((related)=> (
                 <div key={related.id} className='card col-md-4'
-                onClick={() => handleNavigation(related.id)}>
+                onClick={() => handleNavigation(related.id)} style={{cursor:'pointer'}}>
                     <div className='card-body'>
                     <img className='img-fluid card-img' src={related.image_url} alt={related.title}/>
                     <h4 className='card-title text-center'>{related.title}</h4>

@@ -8,6 +8,7 @@ import BookDisplay from './components/BookDisplay';
 import BookDetails from './components/BookDetails';
 import { AuthProvider } from './components/AuthProvider';
 import ProtectedRoute from './components/ProtectedRoute';
+import Footer from './components/Footer';
 
 
 
@@ -30,6 +31,7 @@ const App = () => {
           } />
           
         </Routes>
+        <Footer />
       </div>
     </Router>
     </AuthProvider>
