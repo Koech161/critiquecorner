@@ -10,10 +10,8 @@ from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 import jwt
 from functools import wraps
-from flask_jwt_extended import get_jwt_identity
-import string
+# from flask_jwt_extended import get_jwt_identity, jwt_required
 import os
-import random
 import base64
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timedelta
@@ -51,9 +49,15 @@ cloudinary.config(
 # use @jwt_required decorator to secure routes
 def jwt_required(f):
     @wraps(f)
+    
     def decorated(*args, **kwargs):
-        token = None
+        # user_id = get_jwt_identity()
+        # g.current_user = User.query.get(user_id)
+        # if g.current_user is None:
+        #     return  {'error': 'User not found'}, 404
+        # return f(*args, **kwargs)
 
+        token = None
         if 'Authorization' in request.headers:
             token = request.headers['Authorization'].split(" ")[1]
             
@@ -62,7 +66,7 @@ def jwt_required(f):
             return {'message':'Token is missing'}, 403
         
         try:
-            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'], options={'verify_signatures': False})
             g.current_user = User.query.get(data['user_id'])
     
         except Exception as e:
@@ -167,7 +171,7 @@ class Login(Resource):
 
             expiration_time =  datetime.utcnow() + timedelta(days=7)
 
-            token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256')
+            token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256' )
 
             return {'message': 'Login succesfully', 'token': token, 'user': user.id}, 201
         else:
@@ -232,6 +236,7 @@ class BookByID(Resource):
       
         author_name = book.author.name if book.author else 'unknown'
         reviews = Review.query.filter_by(book_id=book.id).all()
+        related_books = Book.query.filter(Book.author_id == book.author_id, Book.id != book.id).all()
        
         book_info = {
             'title': book.title,
@@ -241,7 +246,8 @@ class BookByID(Resource):
                 'id': book.author.id,
                 'name': author_name
             },
-            'review': [{'content': review.content, 'rating': review.rating, 'username': review.user.username} for review in reviews]
+            'review': [{'content': review.content, 'rating': review.rating, 'username': review.user.username} for review in reviews],
+            'related_books': [{'id': related_book.id, 'title': related_book.title, 'image_url': related_book.image_filename} for related_book in related_books]
         }
       
         return jsonify(book_info)
@@ -353,8 +359,8 @@ class Authors(Resource):
 class UsersBooks(Resource):
     @jwt_required
     def get(self):
-        user_id = get_jwt_identity()
-        usersbook = UsersBook.query.filter_by(user_id=user_id).all()
+        
+        usersbook = UsersBook.query.filter_by(user_id=id).all()
         if not usersbook:
             return {'error': 'usersbook not found'},404
         usersbook_dict = [userbook.to_dict() for userbook in usersbook]
@@ -365,7 +371,7 @@ class UsersBooks(Resource):
         data = request.get_json()
         if not data:
             return {'error': 'Not input provided'}, 404
-        user_id = data.get('user_id')
+        user_id = g.current_user.id
         book_id = data.get('book_id')
 
         new_userbook = UsersBook(user_id=user_id, book_id=book_id)
@@ -373,7 +379,7 @@ class UsersBooks(Resource):
         try:
             db.session.add(new_userbook)
             db.session.commit()
-            return {'message', 'new userbook added succesfully'}, 201
+            return {'message': 'new userbook added succesfully'}, 201
         except Exception as e:
             db.session.rollback()
             return {'error': str(e)}, 500

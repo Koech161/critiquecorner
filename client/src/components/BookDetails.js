@@ -115,8 +115,12 @@ const BookDetails = () => {
     const handleNavigate =() => {
         navigate('/books')
     }
+    const handleNavigation = (id) => {
+        navigate(`/bookdetails/${id}`);
+    };
 
     const reviews = Array.isArray(bookInfo.review) ? bookInfo.review : [];
+    const related_books = Array.isArray(bookInfo.related_books) ? bookInfo.related_books : []
     // const ralatedBooks = Array.isArray(bookInfo.author.id) ? bookInfo.author.name : []
 
     return (
@@ -131,7 +135,7 @@ const BookDetails = () => {
                             src={bookInfo.image_url} 
                             alt={bookInfo.title} 
                             className="img-fluid rounded-start" 
-                            style={{ height: '100%', objectFit: 'cover' }} 
+                            style={{ maxHeight: '100%', }} 
                         />
                     </div>
                     <div className="col-md-8">
@@ -206,6 +210,19 @@ const BookDetails = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+            <h3 className='text-center title'>Related Books: </h3>
+            <div className='row'>
+            {related_books.map((related)=> (
+                <div key={related.id} className='card col-md-4'
+                onClick={() => handleNavigation(related.id)}>
+                    <div className='card-body'>
+                    <img className='img-fluid card-img' src={related.image_url} alt={related.title}/>
+                    <h4 className='card-title text-center'>{related.title}</h4>
+                    </div>
+                    </div>
+
+            ))}
             </div>
         </div>
     );

@@ -68,7 +68,7 @@ const BookDisplay = () => {
                                     style={{ height: '300px', objectFit: 'cover' }} 
                                 />
                                 <div className='card-body'>
-                                    <h5 className='card-title'>{book.title}</h5>
+                                    <h5 className='card-title text-center'>{book.title}</h5>
                                 </div>
                             </div>
                         </div>

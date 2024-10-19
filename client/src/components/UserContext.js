@@ -5,7 +5,7 @@ import axios from "axios";
 const UserContext = createContext()
 
 export const UserProvider = ({children}) =>{
-    const [currentUser, setCurrentUser] = useState(null)
+    const [currentUser, setCurrentUser] = useState({})
 
     const fetchUser = async () =>{
         const id = localStorage.getItem('userId')
@@ -27,7 +27,7 @@ export const UserProvider = ({children}) =>{
         const id = localStorage.getItem('userId')
         console.log('User ID from localStorage:', id);
         if (id){
-            fetchUser(id)
+            fetchUser()
         }
             
     }, [])
