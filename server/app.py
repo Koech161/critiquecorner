@@ -10,6 +10,7 @@ from flask_restful import Api, Resource, reqparse
 from flask_cors import CORS
 import jwt
 from functools import wraps
+from flask_jwt_extended import get_jwt_identity
 import string
 import os
 import random
@@ -350,14 +351,16 @@ class Authors(Resource):
             return {'error': str(e)}, 500
 
 class UsersBooks(Resource):
+    @jwt_required
     def get(self):
-        usersbook = UsersBook.query.all()
+        user_id = get_jwt_identity()
+        usersbook = UsersBook.query.filter_by(user_id=user_id).all()
         if not usersbook:
             return {'error': 'usersbook not found'},404
         usersbook_dict = [userbook.to_dict() for userbook in usersbook]
 
         return jsonify(usersbook_dict), 200
-    
+    @jwt_required
     def post(self):
         data = request.get_json()
         if not data:

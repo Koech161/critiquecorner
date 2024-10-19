@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useUser } from './UserContext';
@@ -12,6 +12,7 @@ const BookDetails = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
     const [editingReview, setEditingReview] = useState(null);
+    const navigate = useNavigate()
     const { currentUser} = useUser()
     const { token } = useAuth()
     
@@ -111,14 +112,20 @@ const BookDetails = () => {
     if (error) {
         return <div className="text-center text-danger">{error}</div>;
     }
+    const handleNavigate =() => {
+        navigate('/books')
+    }
 
     const reviews = Array.isArray(bookInfo.review) ? bookInfo.review : [];
     // const ralatedBooks = Array.isArray(bookInfo.author.id) ? bookInfo.author.name : []
 
     return (
-        <div className="container mt-5" style={{marginTop: '80px'}}>
+        <div className="container mt-5" style={{marginTop: '150px'}}>
+           
             <div className="card mb-4">
+            
                 <div className="row g-0">
+                <button className='btn btn-link w-100' onClick={handleNavigate}>Back</button>
                     <div className="col-md-4">
                         <img 
                             src={bookInfo.image_url} 

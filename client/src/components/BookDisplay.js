@@ -40,7 +40,9 @@ const BookDisplay = () => {
     // setBooks(filteredbooks)
 
     return (
+        
         <div className='container' style={{marginTop:'100px'}}>
+            
             <h1 className='text-center my-4'>Books List</h1>
             {/* <input
             type='text'
@@ -74,6 +76,7 @@ const BookDisplay = () => {
                 )}
             </div>
         </div> 
+        
     );
 };
 
