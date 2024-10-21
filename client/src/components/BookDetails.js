@@ -87,7 +87,10 @@ const BookDetails = () => {
     };
     
     const handleDeleteReview = async (id) => {
+      
+        const reviewToDelete = bookInfo.review.find(rev => rev.id === id); 
         const updatedReviews = bookInfo.review.filter(rev => rev.id !== id);
+        
         setBookInfo(prevBookInfo => ({
             ...prevBookInfo,
             review: updatedReviews,
@@ -101,10 +104,11 @@ const BookDetails = () => {
         } catch (error) {
             console.error('Error deleting review:', error);
             setError('Failed to delete review. Please try again.');
-          
+            
+           
             setBookInfo(prevBookInfo => ({
                 ...prevBookInfo,
-                review: [...prevBookInfo.review, updatedReview] 
+                review: [...prevBookInfo.review, reviewToDelete]
             }));
         }
     };
