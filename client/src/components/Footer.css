@@ -8,4 +8,18 @@
   .col-md-4 {
     padding: 20px;
   }
+
+  /* .navbar-brand{
+    /* color: #00458B;
+    font-weight:bold;
+    font-size: larger; */
+  
+  .navbar-brand h2{
+    color: #00458b;
+    font-weight: 600;
+  }
+
+  .nav-link h6{
+      color:#00458b;
+  }
   

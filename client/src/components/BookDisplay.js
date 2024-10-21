@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './AuthProvider';
-import api from '../services/api'; // Make sure to import your api module
+import api from '../services/api'; 
 
 const BookDisplay = () => {
     const [books, setBooks] = useState([]);

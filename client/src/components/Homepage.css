@@ -29,7 +29,7 @@
     padding: 0.8rem 1.5rem;
     font-size: 1rem;
     color: #fff;
-    background-color: #4a4e69;
+    background-color: #0f2557;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -39,6 +39,13 @@
   }
   
   .explore-button:hover {
-    background-color: #f9ae3b;
+    background-color: #63bce5;
   }
   
+  .homepage-intro h1{
+    color:#3778c2;
+  }
+  .homepage-intro p{
+    color:#28559a;
+  }
+ 
