@@ -154,21 +154,25 @@ class Register(Resource):
      # user Login   
 class Login(Resource):
     def post(self):
-        data = request.get_json()
-        email = data.get('email')
-        password = data.get('password')
+        try:
+            data = request.get_json()
+            email = data.get('email')
+            password = data.get('password')
 
-        user = User.query.filter_by(email=email).first()
+            user = User.query.filter_by(email=email).first()
 
-        if user and check_password_hash(user.password, password):
+            if user and check_password_hash(user.password, password):
 
-            expiration_time =  datetime.utcnow() + timedelta(days=7)
+                expiration_time =  datetime.utcnow() + timedelta(days=7)
 
-            token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256' )
+                token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256' )
 
-            return {'message': 'Login succesfully', 'token': token, 'user': user.id}, 200
-        else:
-            return {'error': 'Invalid user credentials'}, 401
+                return {'message': 'Login succesfully', 'token': token, 'user': user.id}, 200
+            else:
+                return {'error': 'Invalid user credentials'}, 401
+        except Exception as e:
+            return {'error':  str(e)}, 500
+
     def delete(self):
        return {'user logout'}   
     
