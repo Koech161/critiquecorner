@@ -45,21 +45,14 @@ const BookDetails = () => {
             // const token = localStorage.getItem('token');
             if (editingReview) {
                 // API call to update the review
-                await api.patch(`/reviews/${editingReview.id}`, {
+                await api.patch(`/reviews/${id}`, {
                     content: values.content,
                     rating: values.rating,
+                    user_id: currentUser.id,
+                    book_id: id
                 }, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-    
-               
-                const updatedReviews = bookInfo.review.map(rev => 
-                    rev.id === editingReview.id ? { ...rev, content: values.content, rating: values.rating } : rev
-                );
-                setBookInfo(prevBookInfo => ({
-                    ...prevBookInfo,
-                    review: updatedReviews,
-                }));
     
                 setSuccessMessage('Review updated successfully!');
             } else {
