@@ -351,33 +351,7 @@ class Authors(Resource):
             db.session.rollback()
             return {'error': str(e)}, 500
 
-class UsersBooks(Resource):
-    @jwt_required
-    def get(self):
-        
-        usersbook = UsersBook.query.filter_by(user_id=id).all()
-        if not usersbook:
-            return {'error': 'usersbook not found'},404
-        usersbook_dict = [userbook.to_dict() for userbook in usersbook]
 
-        return jsonify(usersbook_dict), 200
-    @jwt_required
-    def post(self):
-        data = request.get_json()
-        if not data:
-            return {'error': 'Not input provided'}, 404
-        user_id = g.current_user.id
-        book_id = data.get('book_id')
-
-        new_userbook = UsersBook(user_id=user_id, book_id=book_id)
-
-        try:
-            db.session.add(new_userbook)
-            db.session.commit()
-            return {'message': 'new userbook added succesfully'}, 201
-        except Exception as e:
-            db.session.rollback()
-            return {'error': str(e)}, 500
         
 class CheckEmail(Resource):
     def post(self):
