@@ -8,6 +8,7 @@ flask-migrate==4.0.7; python_version >= '3.6'
 flask-restful==0.3.10
 flask-admin
 flask-cors
+flask-WTF
 jwt
 wtforms==2.3.3
 cloudinary
