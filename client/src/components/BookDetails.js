@@ -78,21 +78,29 @@ const BookDetails = () => {
         setEditingReview(review);
     };
     
-    const handleDeleteReview = async (id) =>{
+    const handleDeleteReview = async (reviewId) => {
+        // Optimistically update the UI by removing the review from the state
+        const updatedReviews = bookInfo.review.filter(rev => rev.id !== reviewId);
+        setBookInfo(prevBookInfo => ({
+            ...prevBookInfo,
+            review: updatedReviews,
+        }));
+    
         try {
-            const response = await api.delete(`reviews/${id}`)
-                setSuccessMessage('Review deleted successfully')
-                setBookInfo((prevBookInfo) =>({
-                    ...prevBookInfo,
-                    reviews: bookInfo.review.filter(rev => rev.id !==id)
-                }))
-            
+            await api.delete(`/reviews/${reviewId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setSuccessMessage('Review deleted successfully!');
         } catch (error) {
-            console.error('error deleteing review',error);
-            setError('error deleting review')
-            
+            console.error('Error deleting review:', error);
+            setError('Failed to delete review. Please try again.');
+            // Revert the optimistic update in case of an error
+            setBookInfo(prevBookInfo => ({
+                ...prevBookInfo,
+                review: [...prevBookInfo.review, { id: reviewId }] 
+            }));
         }
-    }
+    };
 
     const renderStars = (rating) => {
         const stars = [];
