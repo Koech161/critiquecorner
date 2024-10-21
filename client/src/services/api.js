@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL:'https://critiquecorner.onrender.com', 
+  baseURL:'https://critiquecorner.onrender.com/', 
 });
 // Add a request interceptor
 api.interceptors.request.use((config) => {
