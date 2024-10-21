@@ -30,7 +30,7 @@ app.json.compact = False
 db.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
-CORS(app,resources={r"/*":{"origins":"https://critiquecorner.onrender.com"}}, supports_credentials=True )
+CORS(app,resources={r"/*":{"origins":"https://critiquecorner-1.onrender.com"}}, supports_credentials=True )
 load_dotenv()
 # secret keys for session tokens
 app.config['SECRET_KEY'] = base64.b64encode(os.urandom(24)).decode('utf-8')
