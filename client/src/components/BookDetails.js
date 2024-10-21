@@ -78,16 +78,16 @@ const BookDetails = () => {
         setEditingReview(review);
     };
     
-    const handleDeleteReview = async (reviewId) => {
+    const handleDeleteReview = async (id) => {
         // Optimistically update the UI by removing the review from the state
-        const updatedReviews = bookInfo.review.filter(rev => rev.id !== reviewId);
+        const updatedReviews = bookInfo.review.filter(rev => rev.id !== id);
         setBookInfo(prevBookInfo => ({
             ...prevBookInfo,
             review: updatedReviews,
         }));
     
         try {
-            await api.delete(`/reviews/${reviewId}`, {
+            await api.delete(`/reviews/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSuccessMessage('Review deleted successfully!');
@@ -97,7 +97,7 @@ const BookDetails = () => {
             // Revert the optimistic update in case of an error
             setBookInfo(prevBookInfo => ({
                 ...prevBookInfo,
-                review: [...prevBookInfo.review, { id: reviewId }] 
+                review: [...prevBookInfo.review, { id: id }] 
             }));
         }
     };
@@ -133,7 +133,7 @@ const BookDetails = () => {
    
 
     return (
-        <div className="container mt-5" style={{marginTop: '150px'}}>
+        <div className="container mt-5" style={{marginTop: '200px'}}>
            
             <div className="card mb-4">
             
@@ -164,7 +164,7 @@ const BookDetails = () => {
                                             <p>{review.content}</p>
                                             <button 
                                                 className="btn btn-link" 
-                                                onClick={() => handleEditReview(review)}
+                                                onClick={() => handleEditReview(review.id)}
                                             >
                                                <span role="img" aria-label="edit">
                                                         ✏️
