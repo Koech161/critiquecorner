@@ -12,7 +12,7 @@ const BookDisplay = () => {
         const fetchBooks = async () => {
             try {
                 const response = await api.get('/books'); 
-                console.log(response.data); 
+                console.log("Books state updated:",response.data); 
                 setBooks(response.data); 
             } catch (error) {
                 console.error('Error fetching books:', error);
