@@ -45,11 +45,9 @@ const BookDetails = () => {
             // const token = localStorage.getItem('token');
             if (editingReview) {
                
-                await api.patch(`/reviews/${id}`, {
+                await api.patch(`/reviews/${editingReview.id}`, {
                     content: values.content,
                     rating: values.rating,
-                    user_id: currentUser.id, 
-                    book_id: id
                 }, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
