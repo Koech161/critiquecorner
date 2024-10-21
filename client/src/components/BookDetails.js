@@ -45,7 +45,7 @@ const BookDetails = () => {
             // const token = localStorage.getItem('token');
             if (editingReview) {
                
-                await api.patch(`/reviews/${editingReview.id}`, {
+                await api.patch(`/reviews/${id}`, {
                     content: values.content,
                     rating: values.rating,
                 }, {

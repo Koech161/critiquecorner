@@ -30,7 +30,10 @@ app.json.compact = False
 db.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
-CORS(app,resources={r"/*":{"origins":"https://critiquecorner-1.onrender.com"}}, supports_credentials=True )
+CORS(app, resources={r"/*": {"origins": "https://critiquecorner-1.onrender.com"}},
+     supports_credentials=True,
+     methods=['GET', 'POST', 'PATCH', 'DELETE'],
+     allow_headers=['Content-Type', 'Authorization'])
 load_dotenv()
 # secret keys for session tokens
 app.config['SECRET_KEY'] = base64.b64encode(os.urandom(24)).decode('utf-8')
@@ -302,7 +305,7 @@ class AddReview(Resource):
             return {'error': str(e)},500
 
 class ReviewByID(Resource):
-    @jwt_required
+    # @jwt_required
     def patch(self, id):
         review = Review.query.get(id)
         if not review:
@@ -319,7 +322,7 @@ class ReviewByID(Resource):
         except Exception as e:
             db.session.rollback()
             return {'error updating review':str(e)}, 500  
-    @jwt_required
+    # @jwt_required
     def delete(self, id):
         review = Review.query.get(id)
         if not review:
