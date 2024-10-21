@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import { useUser } from './UserContext';
 import { useAuth } from './AuthProvider';
 import api from '../services/api';
+import { Spinner } from 'react-bootstrap';
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -136,10 +137,10 @@ const BookDetails = () => {
             await api.delete(`/reviews/${reviewId}`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
-            setMessages({ success: 'Review deleted successfully!' });
+            setSuccessMessage({ success: 'Review deleted successfully!' });
         } catch (error) {
             console.error('Error deleting review:', error);
-            setMessages({ error: 'Failed to delete review. Please try again.' });
+            setError({ error: 'Failed to delete review. Please try again.' });
             setBookInfo(prevBookInfo => ({
                 ...prevBookInfo,
                 review: [...prevBookInfo.review, reviewToDelete],
