@@ -44,13 +44,23 @@ const BookDetails = () => {
         try {
             // const token = localStorage.getItem('token');
             if (editingReview) {
-               
+                // API call to update the review
                 await api.patch(`/reviews/${editingReview.id}`, {
                     content: values.content,
                     rating: values.rating,
                 }, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
+    
+               
+                const updatedReviews = bookInfo.review.map(rev => 
+                    rev.id === editingReview.id ? { ...rev, content: values.content, rating: values.rating } : rev
+                );
+                setBookInfo(prevBookInfo => ({
+                    ...prevBookInfo,
+                    review: updatedReviews,
+                }));
+    
                 setSuccessMessage('Review updated successfully!');
             } else {
                
@@ -77,7 +87,6 @@ const BookDetails = () => {
     };
     
     const handleDeleteReview = async (id) => {
-        // Optimistically update the UI by removing the review from the state
         const updatedReviews = bookInfo.review.filter(rev => rev.id !== id);
         setBookInfo(prevBookInfo => ({
             ...prevBookInfo,
@@ -92,10 +101,10 @@ const BookDetails = () => {
         } catch (error) {
             console.error('Error deleting review:', error);
             setError('Failed to delete review. Please try again.');
-            // Revert the optimistic update in case of an error
+          
             setBookInfo(prevBookInfo => ({
                 ...prevBookInfo,
-                review: [...prevBookInfo.review, { id: id }] 
+                review: [...prevBookInfo.review, updatedReview] 
             }));
         }
     };
@@ -180,40 +189,42 @@ const BookDetails = () => {
                                 )}
                             </ul>
 
-                            <Formik
-                                initialValues={{
-                                    content: editingReview ? editingReview.content : '',
-                                    rating: editingReview ? editingReview.rating : ''
-                                }}
-                                validationSchema={Yup.object({
-                                    content: Yup.string().required('Required'),
-                                    rating: Yup.number().required('Required').min(1).max(5)
-                                })}
-                                onSubmit={handleReviewSubmit}
-                            >
-                                <Form>
-                                    <div className="form-group">
-                                        <label htmlFor="content">Review</label>
-                                        <Field name="content" as="textarea" className="form-control" />
-                                        <ErrorMessage name="content" component="div" className="text-danger" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="rating">Rating (1-5)</label>
-                                        <Field name="rating" as="select" className="form-control">
-                                            <option value="">Select a rating</option>
-                                            {[1, 2, 3, 4, 5].map((value) => (
-                                                <option key={value} value={value}>{value}</option>
-                                            ))}
-                                        </Field>
-                                        <ErrorMessage name="rating" component="div" className="text-danger" />
-                                    </div>
-                                    <button type="submit" className="btn btn-primary">
-                                        {editingReview ? 'Update Review' : 'Add Review'}
-                                    </button>
-                                </Form>
-                            </Formik>
+<Formik
+    initialValues={{
+        content: editingReview ? editingReview.content : '',
+        rating: editingReview ? editingReview.rating : ''
+    }}
+    validationSchema={Yup.object({
+        content: Yup.string().required('Required'),
+        rating: Yup.number().required('Required').min(1).max(5)
+    })}
+    onSubmit={handleReviewSubmit}
+>
+    {({ isSubmitting }) => (
+        <Form>
+            <div className="form-group">
+                <label htmlFor="content">Review</label>
+                <Field name="content" as="textarea" className="form-control" />
+                <ErrorMessage name="content" component="div" className="text-danger" />
+            </div>
+            <div className="form-group">
+                <label htmlFor="rating">Rating (1-5)</label>
+                <Field name="rating" as="select" className="form-control">
+                    <option value="">Select a rating</option>
+                    {[1, 2, 3, 4, 5].map((value) => (
+                        <option key={value} value={value}>{value}</option>
+                    ))}
+                </Field>
+                <ErrorMessage name="rating" component="div" className="text-danger" />
+            </div>
+            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                {editingReview ? 'Update Review' : 'Add Review'}
+            </button>
+        </Form>
+    )}
+</Formik>
 
-                            {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
+                {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
                         </div>
                     </div>
                 </div>
