@@ -25,7 +25,7 @@ from flask_wtf import FlaskForm
 from wtforms import SelectField
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.json.compact = False
 
@@ -124,18 +124,13 @@ class AuthorModelView(MyModelView):
     form_columns = ['name']
     column_searchable_list = ['name']
 
-class UsersBookModelView(MyModelView):
-    form_columns = ['user_id', 'book_id', 'date_added']   
-    column_searchable_list = ['user_id', 'book_id']
-    column_filters = ['user_id', 'book_id']
-
 
 admin = Admin(app, name='CritiqueCorner Admin', template_mode='bootstrap3')
 admin.add_view(BookModelView(Book , db.session))
 admin.add_view(ReviewModelView(Review, db.session))
 admin.add_view(UserModelView(User, db.session))  
 admin.add_view(AuthorModelView(Author, db.session)) 
-admin.add_view(UsersBookModelView(UsersBook, db.session))
+
 
 class Home(Resource):
     def get(self):
