@@ -35,34 +35,25 @@ const BookDetails = () => {
 
         fetchBookInfo();
     }, [id, token]);
-
     const handleReviewSubmit = async (values, { resetForm }) => {
         if (!currentUser) {
             setError('You must be logged in to submit a review.');
             return;
         }
         try {
-            // const token = localStorage.getItem('token');
+            const reviewData = {
+                content: values.content,
+                rating: values.rating,
+                user_id: currentUser.id,
+                book_id: id,
+            };
             if (editingReview) {
-                // API call to update the review
-                await api.patch(`/reviews/${id}`, {
-                    content: values.content,
-                    rating: values.rating,
-                    user_id: currentUser.id,
-                    book_id: id
-                }, {
+                await api.patch(`/reviews/${editingReview.id}`, reviewData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-    
                 setSuccessMessage('Review updated successfully!');
             } else {
-               
-                await api.post('/reviews', {
-                    content: values.content,
-                    rating: values.rating,
-                    user_id: currentUser.id, 
-                    book_id: id
-                }, {
+                await api.post('/reviews', reviewData, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setSuccessMessage('Review added successfully!');
@@ -71,13 +62,52 @@ const BookDetails = () => {
             setEditingReview(null); 
         } catch (error) {
             console.error('Error handling review:', error);
-            setError('Failed to save review.');
+            setError('Failed to save review: ' + error.response?.data?.message || 'Unknown error.');
         }
     };
 
-    const handleEditReview = (review) => {
-        setEditingReview(review);
-    };
+    // const handleReviewSubmit = async (values, { resetForm }) => {
+    //     if (!currentUser) {
+    //         setError('You must be logged in to submit a review.');
+    //         return;
+    //     }
+    //     try {
+    //         // const token = localStorage.getItem('token');
+    //         if (editingReview) {
+    //             // API call to update the review
+    //             await api.patch(`/reviews/${id}`, {
+    //                 content: values.content,
+    //                 rating: values.rating,
+    //                 user_id: currentUser.id,
+    //                 book_id: id
+    //             }, {
+    //                 headers: { Authorization: `Bearer ${token}` }
+    //             });
+    
+    //             setSuccessMessage('Review updated successfully!');
+    //         } else {
+               
+    //             await api.post('/reviews', {
+    //                 content: values.content,
+    //                 rating: values.rating,
+    //                 user_id: currentUser.id, 
+    //                 book_id: id
+    //             }, {
+    //                 headers: { Authorization: `Bearer ${token}` }
+    //             });
+    //             setSuccessMessage('Review added successfully!');
+    //         }
+    //         resetForm();
+    //         setEditingReview(null); 
+    //     } catch (error) {
+    //         console.error('Error handling review:', error);
+    //         setError('Failed to save review.');
+    //     }
+    // };
+
+    // const handleEditReview = (review) => {
+    //     setEditingReview(review);
+    // };
     
     const handleDeleteReview = async (id) => {
       
