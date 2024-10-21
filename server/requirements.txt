@@ -9,7 +9,7 @@ flask-restful==0.3.10
 flask-admin
 flask-cors
 flask-WTF
-jwt
+PyJWT
 wtforms==2.3.3
 cloudinary
 python-dotenv
