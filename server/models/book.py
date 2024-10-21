@@ -12,7 +12,7 @@ class Book(db.Model):
 
     author = db.relationship('Author', back_populates='books')
     reviews = db.relationship('Review', back_populates='book', cascade='all, delete-orphan', lazy=True)
-    users_books = db.relationship('UsersBook', back_populates='book', cascade='all, delete-orphan', lazy=True)
+   
 
     def to_dict(self):
         return {

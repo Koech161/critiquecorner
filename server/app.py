@@ -3,7 +3,6 @@ from models.book import Book
 from models.review import Review
 from models.user import User
 from models.author import Author
-from models.userbook import UsersBook
 from config import db
 from flask_migrate import Migrate
 from flask_restful import Api, Resource, reqparse
@@ -375,7 +374,6 @@ api.add_resource(BookByID, '/books/<int:id>')
 api.add_resource(AddReview, '/reviews')
 api.add_resource(ReviewByID, '/reviews/<int:id>')
 api.add_resource(Authors, '/authors')
-api.add_resource(UsersBooks, '/usersbooks')
 api.add_resource(CheckEmail, '/check_email')
 
     
