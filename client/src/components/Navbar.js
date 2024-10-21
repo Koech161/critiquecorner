@@ -9,7 +9,7 @@ const Navbar = () => {
   const { isAuthenticated, logout} = useAuth()
   const { currentUser } = useUser()
   const navigate = useNavigate()
-  const adminEndPoint = process.env.ADMIN_ENDPOINT || 'http://127.0.0.1:5555/admin';
+  const adminEndPoint = process.env.ADMIN_ENDPOINT || 'https://critiquecorner.onrender.com';
 
   const handleLogout = () =>{
     logout()

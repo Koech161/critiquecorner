@@ -31,7 +31,7 @@ app.json.compact = False
 db.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
-CORS(app)
+CORS(app, supports_credentials=True )
 load_dotenv()
 # secret keys for session tokens
 app.config['SECRET_KEY'] = base64.b64encode(os.urandom(24)).decode('utf-8')
@@ -167,9 +167,9 @@ class Login(Resource):
 
             token = jwt.encode({'user_id': user.id, 'exp': expiration_time }, app.config['SECRET_KEY'], algorithm='HS256' )
 
-            return {'message': 'Login succesfully', 'token': token, 'user': user.id}, 201
+            return {'message': 'Login succesfully', 'token': token, 'user': user.id}, 200
         else:
-            return {'error': 'Invalid user credentials'}, 400
+            return {'error': 'Invalid user credentials'}, 401
     def delete(self):
        return {'user logout'}   
     

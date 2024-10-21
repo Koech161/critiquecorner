@@ -47,6 +47,7 @@ const Login = () => {
         } else {
           console.error('Error message:', error.message);
           setErrorMessage('An unexpected error occurred. Please try again later.');
+          formik.resetForm()
         }
       }
       finally{

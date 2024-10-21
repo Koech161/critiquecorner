@@ -32,6 +32,7 @@ const Register = () => {
         }
         const response = await api.post('/users', values);
         console.log(response.data);
+        formik.resetForm()
         navigate('/login')
       } catch (error) {
         console.error('Error registering:', error);

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 // import './BookDisplay.css';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 
 import { useAuth } from './AuthProvider';
+import api from '../services/api';
 
 
 const BookDisplay = () => {
@@ -16,7 +17,7 @@ const BookDisplay = () => {
     useEffect(() => {
         const fetchBooks = async () => {
             try {
-                const response = await axios.get('/books',{
+                const response = await api.get('/books',{
                     headers: {
                         Authorization: `Bearer ${token}` 
                     }

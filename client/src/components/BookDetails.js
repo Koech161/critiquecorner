@@ -1,10 +1,11 @@
-import axios from 'axios';
+// import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useUser } from './UserContext';
 import { useAuth } from './AuthProvider';
+import api from '../services/api';
 
 const BookDetails = () => {
     const { id } = useParams();
@@ -20,7 +21,7 @@ const BookDetails = () => {
     useEffect(() => {
         const fetchBookInfo = async () => {
             try {
-                const response = await axios.get(`/books/${id}`,{
+                const response = await api.get(`/books/${id}`,{
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -44,7 +45,7 @@ const BookDetails = () => {
             // const token = localStorage.getItem('token');
             if (editingReview) {
                
-                await axios.patch(`/reviews/${id}`, {
+                await api.patch(`/reviews/${id}`, {
                     content: values.content,
                     rating: values.rating,
                     user_id: currentUser.id, 
@@ -55,7 +56,7 @@ const BookDetails = () => {
                 setSuccessMessage('Review updated successfully!');
             } else {
                
-                await axios.post('/reviews', {
+                await api.post('/reviews', {
                     content: values.content,
                     rating: values.rating,
                     user_id: currentUser.id, 
@@ -79,7 +80,7 @@ const BookDetails = () => {
     
     const handleDeleteReview = async (id) =>{
         try {
-            const response = await axios.delete(`reviews/${id}`)
+            const response = await api.delete(`reviews/${id}`)
                 setSuccessMessage('Review deleted successfully')
                 setBookInfo((prevBookInfo) =>({
                     ...prevBookInfo,
