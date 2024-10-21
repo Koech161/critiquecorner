@@ -11,6 +11,7 @@ const BookDetails = () => {
     const { id } = useParams();
     const [bookInfo, setBookInfo] = useState(null);
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [successMessage, setSuccessMessage] = useState('');
     const [editingReview, setEditingReview] = useState(null);
     const navigate = useNavigate()
@@ -20,6 +21,7 @@ const BookDetails = () => {
 
     useEffect(() => {
         const fetchBookInfo = async () => {
+            setLoading(true)
             try {
                 const response = await api.get(`/books/${id}`,{
                     headers: {
@@ -31,10 +33,22 @@ const BookDetails = () => {
                 console.error('Error fetching book details:', error);
                 setError('Failed to fetch book details.');
             }
+            finally{
+                setLoading(false)
+            }
         };
 
         fetchBookInfo();
     }, [id, token]);
+    if (loading) {
+        return (
+            <div className="text-center">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </Spinner>
+            </div>
+        );
+    }
     const handleReviewSubmit = async (values, { resetForm }) => {
         if (!currentUser) {
             setError('You must be logged in to submit a review.');
@@ -109,29 +123,26 @@ const BookDetails = () => {
     //     setEditingReview(review);
     // };
     
-    const handleDeleteReview = async (id) => {
-      
-        const reviewToDelete = bookInfo.review.find(rev => rev.id === id); 
-        const updatedReviews = bookInfo.review.filter(rev => rev.id !== id);
-        
+    const handleDeleteReview = async (reviewId) => {
+        const reviewToDelete = bookInfo.review.find(rev => rev.id === reviewId);
+        const updatedReviews = bookInfo.review.filter(rev => rev.id !== reviewId);
+
         setBookInfo(prevBookInfo => ({
             ...prevBookInfo,
             review: updatedReviews,
         }));
-    
+
         try {
-            await api.delete(`/reviews/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
+            await api.delete(`/reviews/${reviewId}`, {
+                headers: { Authorization: `Bearer ${token}` },
             });
-            setSuccessMessage('Review deleted successfully!');
+            setMessages({ success: 'Review deleted successfully!' });
         } catch (error) {
             console.error('Error deleting review:', error);
-            setError('Failed to delete review. Please try again.');
-            
-           
+            setMessages({ error: 'Failed to delete review. Please try again.' });
             setBookInfo(prevBookInfo => ({
                 ...prevBookInfo,
-                review: [...prevBookInfo.review, reviewToDelete]
+                review: [...prevBookInfo.review, reviewToDelete],
             }));
         }
     };
@@ -149,7 +160,7 @@ const BookDetails = () => {
     };
 
     if (!bookInfo) {
-        return <div className="text-center">Loading...</div>;
+        return <div className="text-center">No book information available</div>;
     }
 
     if (error) {
@@ -198,7 +209,7 @@ const BookDetails = () => {
                                             <p>{review.content}</p>
                                             <button 
                                                 className="btn btn-link" 
-                                                onClick={() => handleEditReview(review)}
+                                                onClick={() => setEditingReview(review)}
                                             >
                                                <span role="img" aria-label="edit">
                                                         ✏️
