@@ -87,7 +87,7 @@ const BookDetails = () => {
         }));
     
         try {
-            await api.delete(`/reviews/${reviewId}`, {
+            await api.delete(`/reviews/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSuccessMessage('Review deleted successfully!');

@@ -14,8 +14,9 @@ const Homepage = () => {
   };
 
   return (
+    <div style={{marginTop:'200px'}}>
     <div 
-      className=" homepage container text-center mt-5" style={{marginTop:'100px'}}
+      className=" homepage container text-center mt-5" 
     >
       <h1 className="display-4 text-white bg-secondary"> Welcome to CritiqueCorner the Book Review Website</h1>
       <p className="lead text-white bg-secondary">Explore our collection of books and reviews. Join our community to share your thoughts!</p>
@@ -26,6 +27,7 @@ const Homepage = () => {
       >
         Explore Books
       </button>
+    </div>
     </div>
   );
 };
