@@ -87,7 +87,7 @@ const BookDetails = () => {
         }));
     
         try {
-            await api.delete(`/reviews/${id}`, {
+            await api.delete(`/reviews/${reviewId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             setSuccessMessage('Review deleted successfully!');
@@ -130,7 +130,7 @@ const BookDetails = () => {
 
     const reviews = Array.isArray(bookInfo.review) ? bookInfo.review : [];
     const related_books = Array.isArray(bookInfo.related_books) ? bookInfo.related_books : []
-    // const ralatedBooks = Array.isArray(bookInfo.author.id) ? bookInfo.author.name : []
+   
 
     return (
         <div className="container mt-5" style={{marginTop: '150px'}}>
