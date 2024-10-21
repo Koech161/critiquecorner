@@ -164,7 +164,7 @@ const BookDetails = () => {
                                             <p>{review.content}</p>
                                             <button 
                                                 className="btn btn-link" 
-                                                onClick={() => handleEditReview(review.id)}
+                                                onClick={() => handleEditReview(review)}
                                             >
                                                <span role="img" aria-label="edit">
                                                         ✏️
