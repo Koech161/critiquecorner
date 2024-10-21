@@ -1,17 +1,12 @@
 import React, { useEffect, useState } from 'react';
-// import './BookDisplay.css';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
 import { useAuth } from './AuthProvider';
-
+import api from '../services/api'; // Make sure to import your api module
 
 const BookDisplay = () => {
     const [books, setBooks] = useState([]);
-    // const [search, setSearch] = useState('')
-    const navigate = useNavigate()
-    const { token }= useAuth()
-
+    const navigate = useNavigate();
+    const { token } = useAuth();
 
     useEffect(() => {
         const fetchBooks = async () => {
@@ -30,22 +25,10 @@ const BookDisplay = () => {
     const handleNavigation = (id) => {
         navigate(`/bookdetails/${id}`);
     };
-    // const filteredbooks = books.filter(book => {
-    //     book.title.toLowerCase().includes(search.toLowerCase())
-    // })
-    // setBooks(filteredbooks)
 
     return (
-        
-        <div className='container' style={{marginTop:'100px'}}>
-            
+        <div className='container' style={{ marginTop: '100px' }}>
             <h1 className='text-center my-4'>Books List</h1>
-            {/* <input
-            type='text'
-            id='search'
-            name='search'
-            value={setSearch}
-            /> */}
             <div className='row'>
                 {Array.isArray(books) && books.length === 0 ? (
                     <p>No books found.</p>
@@ -71,8 +54,7 @@ const BookDisplay = () => {
                     ))
                 )}
             </div>
-        </div> 
-        
+        </div>
     );
 };
 

@@ -1,14 +1,12 @@
-
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import api from '../services/api';
 import './Login.css';
-import { useAuth } from './AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-<<<<<<<<< Temporary merge branch 1
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -25,11 +23,10 @@ const Login = () => {
     onSubmit: async (values) => {
       try {
         const response = await api.post('/login', values);
-        console.log(response.data); 
-        
+        console.log(response.data);
+        navigate('/'); // Redirect to home or another page
       } catch (error) {
         console.error('Error logging in:', error);
-      
       }
     },
   });
@@ -49,7 +46,6 @@ const Login = () => {
                 value={formik.values.email}
                 className={`form-control ${formik.errors.email ? 'is-invalid' : ''}`}
                 placeholder="Email"
-                required
               />
               {formik.errors.email && <div className="invalid-feedback">{formik.errors.email}</div>}
             </div>
@@ -62,53 +58,12 @@ const Login = () => {
                 value={formik.values.password}
                 className={`form-control ${formik.errors.password ? 'is-invalid' : ''}`}
                 placeholder="Password"
-                required
               />
               {formik.errors.password && <div className="invalid-feedback">{formik.errors.password}</div>}
             </div>
             <button type="submit" className="btn btn-primary w-100">Login</button>
           </form>
         </div>
-=========
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await api.post('/login', { email, password });
-      console.log(response.data); 
-    } catch (error) {
-      console.error('Error logging in:', error);
-    }
-  };
-
-  return (
-    <div className='container'>
-      <div id='centered-container'>
-        <h2 className='login'>Login</h2>
-        <form onSubmit={handleLogin}>
-          <input
-            className='input-container'
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
-          <input
-            className='input-container'
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            required
-          />
-          <div className='button-container'>
-            <button className='btn btn-success btn-sm custom-button' type="submit">Login</button>
-          </div>
-        </form>
->>>>>>>>> Temporary merge branch 2
       </div>
     </div>
   );

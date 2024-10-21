@@ -1,8 +1,9 @@
-import React from 'react'
+import React from 'react';
+import './Footer.css';
 
 const Footer = () => {
   return (
-    <footer className="footer" style={{borderTop:'1px solid #ccc', marginTop:'20px'}}>
+    <footer className="footer" style={{ borderTop: '1px solid #ccc', marginTop: '20px' }}>
       <div className="container">
         <div className="row">
           <div className="col-md-4">
@@ -36,7 +37,7 @@ const Footer = () => {
         <p>&copy; {new Date().getFullYear()} CritiqueCorner. All rights reserved.</p>
       </div>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

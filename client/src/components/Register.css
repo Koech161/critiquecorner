@@ -1,56 +1,62 @@
-<<<<<<<<< Temporary merge branch 1
-.form-container {
-    max-width: 400px;
-    margin: 2rem auto;
-    padding: 2rem;
-    border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .form-container h2 {
-    text-align: center;
-    color: #4a4e69;
-  }
-  
-  .form-group {
-    margin: 1.5rem 0;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #333;
-  }
-  
-  .form-group input {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .submit-button {
-    width: 100%;
-    padding: 0.8rem;
-    background-color: #4a4e69;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .submit-button:hover {
-    background-color: #f9ae3b;
-  }
-  .error {
-    color: red;
-    margin-top: 5px;
-  }
-=========
 .container {
   padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+  text-align: center;
+  color: #4a4e69;
+}
+
+.form-group {
+  margin: 1.5rem 0;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.8rem;
+  background-color: #4a4e69;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #f9ae3b;
+}
+
+.error {
+  color: red;
+  margin-top: 5px;
+}
+
+.button-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -59,24 +65,8 @@
 .input-container {
   display: block;
   padding: 10px;
-  width: 120%;
+  width: 100%; /* Changed to 100% for consistency */
   border: 1px solid #ccc;
   margin: 15px 0; /* Adjusted for better vertical spacing */
   border-radius: 4px;
 }
-
-#centered-container {
-  margin: 50px;
-  background-color: #ffffff;
-  padding: 20px;
-}
-.custom-button {
-  width: 120%; 
-  margin-left: -10%; 
-}
-.button-container{
-  display:flex;
-  justify-content: center;
-  align-items: center;
-}
->>>>>>>>> Temporary merge branch 2
