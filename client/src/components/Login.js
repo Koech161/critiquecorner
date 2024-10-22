@@ -94,7 +94,7 @@ const Login = () => {
               {formik.errors.password && <div className="invalid-feedback">{formik.errors.password}</div>}
             </div>
             <button type="submit" className="btn btn-success w-100">
-              {loading ? 'Loggong in..': 'Login'}</button>
+              {loading ? 'Logging in..': 'Login'}</button>
           </form>
         </div>
       </div>

@@ -124,29 +124,29 @@ const BookDetails = () => {
     //     setEditingReview(review);
     // };
     
-    const handleDeleteReview = async (reviewId) => {
-        const reviewToDelete = bookInfo.review.find(rev => rev.id === reviewId);
-        const updatedReviews = bookInfo.review.filter(rev => rev.id !== reviewId);
+    // const handleDeleteReview = async (reviewId) => {
+    //     const reviewToDelete = bookInfo.review.find(rev => rev.id === reviewId);
+    //     const updatedReviews = bookInfo.review.filter(rev => rev.id !== reviewId);
 
-        setBookInfo(prevBookInfo => ({
-            ...prevBookInfo,
-            review: updatedReviews,
-        }));
+    //     setBookInfo(prevBookInfo => ({
+    //         ...prevBookInfo,
+    //         review: updatedReviews,
+    //     }));
 
-        try {
-            await api.delete(`/reviews/${reviewId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            setSuccessMessage({ success: 'Review deleted successfully!' });
-        } catch (error) {
-            console.error('Error deleting review:', error);
-            setError({ error: 'Failed to delete review. Please try again.' });
-            setBookInfo(prevBookInfo => ({
-                ...prevBookInfo,
-                review: [...prevBookInfo.review, reviewToDelete],
-            }));
-        }
-    };
+    //     try {
+    //         await api.delete(`/reviews/${reviewId}`, {
+    //             headers: { Authorization: `Bearer ${token}` },
+    //         });
+    //         setSuccessMessage({ success: 'Review deleted successfully!' });
+    //     } catch (error) {
+    //         console.error('Error deleting review:', error);
+    //         setError({ error: 'Failed to delete review. Please try again.' });
+    //         setBookInfo(prevBookInfo => ({
+    //             ...prevBookInfo,
+    //             review: [...prevBookInfo.review, reviewToDelete],
+    //         }));
+    //     }
+    // };
 
     const renderStars = (rating) => {
         const stars = [];
@@ -179,7 +179,8 @@ const BookDetails = () => {
    
 
     return (
-        <div className="container mt-5" style={{marginTop: '200px'}}>
+        <div style={{marginTop: '200px'}}>
+        <div className="container mt-5" >
            
             <div className="card mb-4">
             
@@ -208,7 +209,7 @@ const BookDetails = () => {
                                             <em>by {review.username}</em>
                                             {renderStars(review.rating)}
                                             <p>{review.content}</p>
-                                            <button 
+                                            {/* <button 
                                                 className="btn btn-link" 
                                                 onClick={() => setEditingReview(review)}
                                             >
@@ -220,7 +221,7 @@ const BookDetails = () => {
                                             <span role="img" aria-label="delete">
                                                 🗑
                                             </span>
-                                            </button>
+                                            </button> */}
                                         </li>
                                     ))
                                 ) : (
@@ -281,6 +282,7 @@ const BookDetails = () => {
 
             ))}
             </div>
+        </div>
         </div>
     );
 };
