@@ -81,72 +81,7 @@ const BookDetails = () => {
         }
     };
 
-    // const handleReviewSubmit = async (values, { resetForm }) => {
-    //     if (!currentUser) {
-    //         setError('You must be logged in to submit a review.');
-    //         return;
-    //     }
-    //     try {
-    //         // const token = localStorage.getItem('token');
-    //         if (editingReview) {
-    //             // API call to update the review
-    //             await api.patch(`/reviews/${id}`, {
-    //                 content: values.content,
-    //                 rating: values.rating,
-    //                 user_id: currentUser.id,
-    //                 book_id: id
-    //             }, {
-    //                 headers: { Authorization: `Bearer ${token}` }
-    //             });
     
-    //             setSuccessMessage('Review updated successfully!');
-    //         } else {
-               
-    //             await api.post('/reviews', {
-    //                 content: values.content,
-    //                 rating: values.rating,
-    //                 user_id: currentUser.id, 
-    //                 book_id: id
-    //             }, {
-    //                 headers: { Authorization: `Bearer ${token}` }
-    //             });
-    //             setSuccessMessage('Review added successfully!');
-    //         }
-    //         resetForm();
-    //         setEditingReview(null); 
-    //     } catch (error) {
-    //         console.error('Error handling review:', error);
-    //         setError('Failed to save review.');
-    //     }
-    // };
-
-    // const handleEditReview = (review) => {
-    //     setEditingReview(review);
-    // };
-    
-    // const handleDeleteReview = async (reviewId) => {
-    //     const reviewToDelete = bookInfo.review.find(rev => rev.id === reviewId);
-    //     const updatedReviews = bookInfo.review.filter(rev => rev.id !== reviewId);
-
-    //     setBookInfo(prevBookInfo => ({
-    //         ...prevBookInfo,
-    //         review: updatedReviews,
-    //     }));
-
-    //     try {
-    //         await api.delete(`/reviews/${reviewId}`, {
-    //             headers: { Authorization: `Bearer ${token}` },
-    //         });
-    //         setSuccessMessage({ success: 'Review deleted successfully!' });
-    //     } catch (error) {
-    //         console.error('Error deleting review:', error);
-    //         setError({ error: 'Failed to delete review. Please try again.' });
-    //         setBookInfo(prevBookInfo => ({
-    //             ...prevBookInfo,
-    //             review: [...prevBookInfo.review, reviewToDelete],
-    //         }));
-    //     }
-    // };
 
     const renderStars = (rating) => {
         const stars = [];
@@ -209,19 +144,7 @@ const BookDetails = () => {
                                             <em>by {review.username}</em>
                                             {renderStars(review.rating)}
                                             <p>{review.content}</p>
-                                            {/* <button 
-                                                className="btn btn-link" 
-                                                onClick={() => setEditingReview(review)}
-                                            >
-                                               <span role="img" aria-label="edit">
-                                                        ✏️
-                                                 </span>
-                                            </button>
-                                            <button className='btn btn-link' onClick={() => handleDeleteReview(review.id)}>
-                                            <span role="img" aria-label="delete">
-                                                🗑
-                                            </span>
-                                            </button> */}
+                                            
                                         </li>
                                     ))
                                 ) : (
