@@ -179,7 +179,7 @@ const BookDetails = () => {
    
 
     return (
-        <div style={{marginTop: '200px'}}>
+        <div style={{marginTop: '150px'}}>
         <div className="container mt-5" >
            
             <div className="card mb-4">
