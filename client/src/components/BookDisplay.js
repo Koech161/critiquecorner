@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from './AuthProvider';
 import api from '../services/api';
+import { Spinner } from 'react-bootstrap';
 
 
 const BookDisplay = () => {
@@ -53,7 +54,11 @@ const BookDisplay = () => {
             /> */}
             <div className='row'>
                 {Array.isArray(books) && books.length === 0 ? (
-                    <p>No books found.</p>
+                    <div className="text-center">
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>
                 ) : (
                     books.map((book) => (
                         <div 
